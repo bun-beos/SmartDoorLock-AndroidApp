@@ -10,10 +10,14 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/background_login"
+        android:background="@color/bg_color"
         android:gravity="center"
         android:orientation="vertical"
-        tools:context=".ui.LoginFragment">
+        tools:context=".ui.welcome.LoginFragment">
+
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/toolbar" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardView"
@@ -30,7 +34,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:background="@drawable/custom_edittext"
+                android:background="@drawable/custom_edittext_focus"
                 android:orientation="vertical"
                 android:padding="20dp">
 
@@ -60,15 +64,16 @@
                     android:id="@+id/emailL"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:errorEnabled="true">
+                    app:helperText=" "
+                    app:helperTextTextColor="@color/error"
+                    app:endIconMode="clear_text">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/email"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
                         android:layout_marginTop="12dp"
-                        android:background="@drawable/custom_edittext"
-                        android:inputType="text"
+                        android:inputType="textEmailAddress"
                         android:maxLines="1"
                         android:padding="8dp"
                         android:scrollHorizontally="true" />
@@ -89,14 +94,14 @@
                     android:id="@+id/passwordL"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:passwordToggleEnabled="true"
-                    app:errorEnabled="true">
+                    app:helperText=" "
+                    app:helperTextTextColor="@color/error"
+                    app:endIconMode="password_toggle">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/password"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
-                        android:background="@drawable/custom_edittext"
                         android:inputType="textPassword"
                         android:padding="8dp" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -120,25 +125,27 @@
             android:id="@+id/registerNow"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="28dp"
             android:text="@string/signup_now"
-            android:textColor="@color/black"
-            android:layout_marginStart="20dp"
+            android:textColor="@color/link_color"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cardView" />
+            app:layout_constraintTop_toBottomOf="@+id/cardView"
+            app:layout_constraintVertical_bias="0.7" />
 
         <TextView
             android:id="@+id/forgotPassword"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/forgot_password"
-            android:textColor="@color/black"
+            android:textColor="@color/link_color"
             android:layout_marginEnd="20dp"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cardView" />
+            app:layout_constraintTop_toBottomOf="@+id/cardView"
+            app:layout_constraintVertical_bias="0.7"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

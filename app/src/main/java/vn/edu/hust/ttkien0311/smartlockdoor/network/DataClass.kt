@@ -17,3 +17,9 @@ data class ErrorResponse (
     @Json(name = "DevMessage") val devMessage : String,
     @Json(name = "UserMessage") val userMessage : String
 )
+
+data class PasswordReset (
+    @Json(name = "PasswordToken") val passwordToken : String,
+    @Json(name = "NewPassword") val newPassword : String,
+    @Json(name = "CompareNewPassword") val compareNewPassword : String
+)

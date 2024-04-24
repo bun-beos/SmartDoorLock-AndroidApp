@@ -10,10 +10,14 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/background_login"
+        android:background="@color/bg_color"
         android:gravity="center"
         android:orientation="vertical"
-        tools:context=".ui.RegisterFragment">
+        tools:context=".ui.welcome.RegisterFragment">
+
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/toolbar" />
 
         <androidx.cardview.widget.CardView
             android:id="@+id/cardView"
@@ -30,7 +34,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:background="@drawable/custom_edittext"
+                android:background="@drawable/custom_edittext_focus"
                 android:orientation="vertical"
                 android:padding="20dp">
 
@@ -44,7 +48,7 @@
                     android:textColor="@color/my_secondary"
                     android:textSize="36sp"
                     android:textStyle="bold" />
-
+h
                 <TextView
                     android:id="@+id/emailLabel"
                     android:layout_width="match_parent"
@@ -60,14 +64,15 @@
                     android:id="@+id/emailL"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:errorEnabled="true">
+                    app:endIconMode="clear_text"
+                    app:helperText=" "
+                    app:helperTextTextColor="@color/error">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/email"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
                         android:layout_marginTop="12dp"
-                        android:background="@drawable/custom_edittext"
                         android:inputType="textEmailAddress"
                         android:maxLines="1"
                         android:padding="8dp"
@@ -89,14 +94,14 @@
                     android:id="@+id/passwordL"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    app:passwordToggleEnabled="true"
-                    app:errorEnabled="true">
+                    app:helperText=" "
+                    app:helperTextTextColor="@color/error"
+                    app:endIconMode="password_toggle">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/password"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
-                        android:background="@drawable/custom_edittext"
                         android:inputType="textPassword"
                         android:padding="8dp" />
                 </com.google.android.material.textfield.TextInputLayout>
@@ -114,14 +119,14 @@
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    app:endIconMode="clear_text">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/username"
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
                         android:layout_marginTop="12dp"
-                        android:background="@drawable/custom_edittext"
                         android:inputType="text"
                         android:maxLines="1"
                         android:padding="8dp"
@@ -155,15 +160,15 @@
                 android:layout_height="wrap_content"
                 android:text="Bạn đã có tài khoản? "
                 android:textColor="@color/black"
-                android:textSize="16sp"/>
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/loginNow"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/login_now"
-                android:textColor="#0015CF"
-                android:textSize="16sp"/>
+                android:textColor="@color/link_color"
+                android:textSize="16sp" />
 
         </LinearLayout>
 

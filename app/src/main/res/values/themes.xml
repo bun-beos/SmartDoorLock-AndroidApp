@@ -3,11 +3,13 @@
     <style name="Base.Theme.SmartLockDoor" parent="Theme.Material3.DayNight.NoActionBar">
         <!-- Customize your light theme here. -->
         <item name="colorPrimary">@color/my_light_primary</item>
+        <item name="colorPrimaryVariant">@color/primary_variant</item>
+        <item name="bottomNavigationStyle">@color/my_light_primary</item>
     </style>
 
     <style name="Theme.SmartLockDoor" parent="Base.Theme.SmartLockDoor" />
     
     <style name="TransparentDialogTheme" parent="Theme.AppCompat.Dialog.Alert">
-        <item name="android:windowBackground">#00FFFFFF</item>
+        <item name="android:windowBackground">@color/transparent_color</item>
     </style>
 </resources>

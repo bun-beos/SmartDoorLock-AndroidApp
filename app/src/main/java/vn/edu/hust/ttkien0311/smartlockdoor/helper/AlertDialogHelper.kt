@@ -7,7 +7,7 @@ import vn.edu.hust.ttkien0311.smartlockdoor.R
 object AlertDialogHelper {
     private var alertDialog : AlertDialog? = null
 
-    fun showAlertDialog(context : Context, title: String, message: String) {
+    fun showAlertDialog(context : Context, title: String?, message: String) {
         val builder = AlertDialog.Builder(context)
             .setTitle(title)
             .setMessage(message)

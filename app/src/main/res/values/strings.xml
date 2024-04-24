@@ -12,9 +12,14 @@
     <string name="welcome_title">Smart Lock Door</string>
     <string name="signup">Đăng ký</string>
     <string name="create_account">Tạo tài khoản</string>
-    <string name="signup_now"><u>Đăng ký ngay</u></string>
-    <string name="login_now"><u>Đăng nhập ngay</u></string>
+    <string name="signup_now">Đăng ký ngay</string>
+    <string name="login_now">Đăng nhập ngay</string>
     <string name="name">Tên</string>
     <string name="email">Email</string>
-    <string name="forgot_password"><u>Quên mật khẩu</u></string>
+    <string name="forgot_password">Quên mật khẩu?</string>
+    <string name="send">Gửi</string>
+    <string name="send_again">Gửi lại</string>
+    <string name="new_password">Mật khẩu mới</string>
+    <string name="confirm_password">Xác nhận mật khẩu mới</string>
+    <string name="code">Mã xác thực</string>
 </resources>
