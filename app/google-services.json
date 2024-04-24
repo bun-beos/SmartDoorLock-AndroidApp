@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "860280588853",
+    "project_id": "smart-doorbell-ffebe",
+    "storage_bucket": "smart-doorbell-ffebe.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:860280588853:android:cd0d355216a9e81f40ff7c",
+        "android_client_info": {
+          "package_name": "vn.edu.hust.ttkien0311.smartlockdoor"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyApFPl6nm99dVKgjzVu-JsrrwSDlIgd-sQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
