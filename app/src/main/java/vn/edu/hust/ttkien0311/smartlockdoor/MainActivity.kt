@@ -3,11 +3,9 @@ package vn.edu.hust.ttkien0311.smartlockdoor
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import vn.edu.hust.ttkien0311.smartlockdoor.databinding.ActivityMainBinding
-import vn.edu.hust.ttkien0311.smartlockdoor.helper.EncryptedSharedPreferencesManager
 import vn.edu.hust.ttkien0311.smartlockdoor.ui.main.HomeFragment
 import vn.edu.hust.ttkien0311.smartlockdoor.ui.main.ProfileFragment
 import vn.edu.hust.ttkien0311.smartlockdoor.ui.main.SettingFragment
