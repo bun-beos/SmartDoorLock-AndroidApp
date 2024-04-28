@@ -14,7 +14,6 @@ import vn.edu.hust.ttkien0311.smartlockdoor.ui.main.SettingFragment
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        val sharedPreferencesManager = EncryptedSharedPreferencesManager(this)
 
         super.onCreate(savedInstanceState)
         val binding : ActivityMainBinding = DataBindingUtil.setContentView(this, R.layout.activity_main)
