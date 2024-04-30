@@ -8,9 +8,8 @@ import retrofit2.converter.moshi.MoshiConverterFactory
 import retrofit2.http.Body
 import retrofit2.http.POST
 import java.util.concurrent.TimeUnit
-import java.util.regex.Pattern
 
-private const val BASE_URL = "http://192.168.0.105:8011"
+private const val BASE_URL = "https://smartlockdoor.azurewebsites.net/"
 
 private val moshi = Moshi.Builder()
     .add(KotlinJsonAdapterFactory())

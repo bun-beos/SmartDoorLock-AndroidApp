@@ -8,10 +8,11 @@ import vn.edu.hust.ttkien0311.smartlockdoor.helper.EncryptedSharedPreferencesMan
 class WelcomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         val sharedPreferencesManager = EncryptedSharedPreferencesManager(this)
+
         if (sharedPreferencesManager.getLoginStatus()) {
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
-            finish()
+//            finish()
         }
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_welcome)
