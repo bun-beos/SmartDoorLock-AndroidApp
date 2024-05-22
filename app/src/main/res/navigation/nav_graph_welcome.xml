@@ -2,12 +2,12 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav_graph"
+    android:id="@+id/nav_graph_welcome"
     app:startDestination="@id/welcomeFragment">
 
     <fragment
         android:id="@+id/welcomeFragment"
-        android:name="vn.edu.hust.ttkien0311.smartlockdoor.ui.WelcomeFragment"
+        android:name="vn.edu.hust.ttkien0311.smartlockdoor.ui.welcome.WelcomeFragment"
         android:label="fragment_welcome"
         tools:layout="@layout/fragment_welcome" >
         <action
@@ -19,7 +19,7 @@
     </fragment>
     <fragment
         android:id="@+id/registerFragment"
-        android:name="vn.edu.hust.ttkien0311.smartlockdoor.ui.RegisterFragment"
+        android:name="vn.edu.hust.ttkien0311.smartlockdoor.ui.welcome.RegisterFragment"
         android:label="fragment_register"
         tools:layout="@layout/fragment_register" >
         <action
@@ -31,19 +31,19 @@
     </fragment>
     <fragment
         android:id="@+id/loginFragment"
-        android:name="vn.edu.hust.ttkien0311.smartlockdoor.ui.LoginFragment"
+        android:name="vn.edu.hust.ttkien0311.smartlockdoor.ui.welcome.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
         <action
             android:id="@+id/action_loginFragment_to_registerFragment"
             app:destination="@id/registerFragment" />
         <action
-            android:id="@+id/action_loginFragment_to_homeFragment"
-            app:destination="@id/homeFragment" />
+            android:id="@+id/action_loginFragment_to_forgotPasswordFragment"
+            app:destination="@id/forgotPasswordFragment" />
     </fragment>
     <fragment
         android:id="@+id/emailNotifyFragment"
-        android:name="vn.edu.hust.ttkien0311.smartlockdoor.ui.EmailNotifyFragment"
+        android:name="vn.edu.hust.ttkien0311.smartlockdoor.ui.welcome.EmailNotifyFragment"
         android:label="fragment_email_notify"
         tools:layout="@layout/fragment_email_notify" >
         <argument
@@ -55,8 +55,29 @@
             app:destination="@id/loginFragment" />
     </fragment>
     <fragment
-        android:id="@+id/homeFragment"
-        android:name="vn.edu.hust.ttkien0311.smartlockdoor.ui.HomeFragment"
-        android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
+        android:id="@+id/forgotPasswordFragment"
+        android:name="vn.edu.hust.ttkien0311.smartlockdoor.ui.welcome.ForgotPasswordFragment"
+        android:label="ForgotPasswordFragment"
+        tools:layout="@layout/fragment_forgot_password">
+        <action
+            android:id="@+id/action_forgotPasswordFragment_to_resetPasswordFragment"
+            app:destination="@id/resetPasswordFragment" />
+        <argument
+            android:name="email"
+            android:defaultValue=""
+            app:argType="string"/>
+    </fragment>
+    <fragment
+        android:id="@+id/resetPasswordFragment"
+        android:name="vn.edu.hust.ttkien0311.smartlockdoor.ui.welcome.ResetPasswordFragment"
+        android:label="ResetPasswordFragment"
+        tools:layout="@layout/fragment_reset_password">
+        <action
+            android:id="@+id/action_resetPasswordFragment_to_loginFragment"
+            app:destination="@id/loginFragment" />
+        <argument
+            android:name="email"
+            android:defaultValue=""
+            app:argType="string" />
+    </fragment>
 </navigation>

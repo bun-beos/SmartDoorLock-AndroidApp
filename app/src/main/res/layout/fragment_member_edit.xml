@@ -1,0 +1,176 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="viewModel"
+            type="vn.edu.hust.ttkien0311.smartlockdoor.ui.main.member.MemberViewModel" />
+    </data>
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/bg_color"
+        tools:context=".ui.main.member.MemberEditFragment">
+
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/toolbar" />
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/memberImage"
+            imageUrl="@{viewModel.member.memberPhoto}"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar"
+            app:shapeAppearanceOverlay="@style/circular"
+            app:strokeColor="@color/white"
+            app:strokeWidth="1dp" />
+
+        <TextView
+            android:id="@+id/selectImage"
+            android:layout_width="100dp"
+            android:layout_height="25dp"
+            android:layout_marginTop="10dp"
+            android:gravity="center"
+            android:text="Chọn ảnh"
+            android:textColor="@color/primary_variant"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/memberImage" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:orientation="vertical"
+            android:padding="12dp"
+            app:layout_constraintTop_toBottomOf="@id/selectImage">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/full_name_label"
+                    android:textColor="@color/black"
+                    android:textSize="15sp" />
+
+                <EditText
+                    android:id="@+id/editMemberName"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:inputType="text"
+                    android:text="@{viewModel.member.memberName}"
+                    android:textColor="@color/my_light_primary"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/errorName"
+                    android:layout_width="match_parent"
+                    android:layout_height="16dp"
+                    android:paddingStart="0dp"
+                    android:paddingEnd="4dp"
+                    android:textAlignment="viewEnd"
+                    android:textColor="@color/light_error"
+                    android:textSize="12sp"
+                    android:visibility="invisible"
+                    tools:text="pphg" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/date_of_birth"
+                    android:textColor="@color/black"
+                    android:textSize="15sp" />
+
+                <EditText
+                    android:id="@+id/editDateOfBirth"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:hint="@string/dd_mm_yyyy"
+                    android:inputType="date"
+                    android:text="@{viewModel.member.dateOfBirth}"
+                    android:textColor="@color/my_light_primary"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/errorDateOfBirth"
+                    android:layout_width="match_parent"
+                    android:layout_height="16dp"
+                    android:paddingStart="0dp"
+                    android:paddingEnd="4dp"
+                    android:textAlignment="viewEnd"
+                    android:textColor="@color/light_error"
+                    android:textSize="12sp"
+                    android:visibility="invisible"
+                    tools:text="@tools:sample/full_names" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/phone_number"
+                    android:textColor="@color/black"
+                    android:textSize="15sp" />
+
+                <EditText
+                    android:id="@+id/editPhoneNumber"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:inputType="phone"
+                    android:text="@{viewModel.member.phoneNumber}"
+                    android:textColor="@color/my_light_primary"
+                    android:textSize="16sp" />
+
+                <TextView
+                    android:id="@+id/errorPhone"
+                    android:layout_width="match_parent"
+                    android:layout_height="16dp"
+                    android:paddingStart="0dp"
+                    android:paddingEnd="4dp"
+                    android:textAlignment="viewEnd"
+                    android:textColor="@color/light_error"
+                    android:textSize="12sp"
+                    android:visibility="invisible"
+                    tools:text="@tools:sample/full_names" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <Button
+            android:id="@+id/updateButton"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:backgroundTint="@color/my_light_primary_disable"
+            android:clickable="false"
+            android:text="@string/update"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.95" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

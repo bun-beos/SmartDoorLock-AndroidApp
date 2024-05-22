@@ -19,8 +19,8 @@ import vn.edu.hust.ttkien0311.smartlockdoor.helper.AlertDialogHelper.hideLoading
 import vn.edu.hust.ttkien0311.smartlockdoor.helper.AlertDialogHelper.showLoading
 import vn.edu.hust.ttkien0311.smartlockdoor.helper.EncryptedSharedPreferencesManager
 import vn.edu.hust.ttkien0311.smartlockdoor.helper.ExceptionHelper.handleException
-import vn.edu.hust.ttkien0311.smartlockdoor.helper.ValidateHelper.validateEmail
-import vn.edu.hust.ttkien0311.smartlockdoor.helper.ValidateHelper.validatePassword
+import vn.edu.hust.ttkien0311.smartlockdoor.helper.Helper.validateEmail
+import vn.edu.hust.ttkien0311.smartlockdoor.helper.Helper.validatePassword
 import vn.edu.hust.ttkien0311.smartlockdoor.network.AccountDto
 import vn.edu.hust.ttkien0311.smartlockdoor.network.ServerApi
 
@@ -80,24 +80,25 @@ class LoginFragment : Fragment() {
                     )
 
                     try {
-                        activity?.let { showLoading(it) }
+                        showLoading(requireActivity())
                         delay(600)
 
-                        val response = ServerApi.retrofitService.login(accountDto)
+                        val response = ServerApi(requireActivity()).retrofitService.login(accountDto)
 
-                        val sharedPreferencesManager = activity?.let {
-                            EncryptedSharedPreferencesManager(it)
-                        }
-                        sharedPreferencesManager?.saveAccessToken(response.accessToken)
-                        sharedPreferencesManager?.saveRefreshToken(response.refreshToken)
-                        sharedPreferencesManager?.saveLoginStatus(true)
+                        val sharedPreferencesManager = EncryptedSharedPreferencesManager(requireContext())
+                        sharedPreferencesManager.saveAccessToken(response.accessToken)
+                        sharedPreferencesManager.saveRefreshToken(response.refreshToken)
+                        sharedPreferencesManager.saveRefreshTokenExpires(response.refreshTokenExpires)
+                        sharedPreferencesManager.saveLoginStatus(true)
 
                         hideLoading()
+
                         val intent = Intent(activity, MainActivity::class.java)
                         startActivity(intent)
+                        requireActivity().finish()
                     } catch (ex: Exception) {
                         hideLoading()
-                        activity?.let { handleException(ex, it) }
+                        handleException(ex, requireActivity())
                     }
                 }
             } else {

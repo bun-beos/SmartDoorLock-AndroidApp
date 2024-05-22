@@ -19,12 +19,11 @@ import vn.edu.hust.ttkien0311.smartlockdoor.databinding.FragmentResetPasswordBin
 import vn.edu.hust.ttkien0311.smartlockdoor.helper.AlertDialogHelper.hideLoading
 import vn.edu.hust.ttkien0311.smartlockdoor.helper.AlertDialogHelper.showLoading
 import vn.edu.hust.ttkien0311.smartlockdoor.helper.ExceptionHelper.handleException
-import vn.edu.hust.ttkien0311.smartlockdoor.helper.ValidateHelper.comparePassword
-import vn.edu.hust.ttkien0311.smartlockdoor.helper.ValidateHelper.validatePassword
-import vn.edu.hust.ttkien0311.smartlockdoor.helper.ValidateHelper.validatePasswordToken
+import vn.edu.hust.ttkien0311.smartlockdoor.helper.Helper.comparePassword
+import vn.edu.hust.ttkien0311.smartlockdoor.helper.Helper.validatePassword
+import vn.edu.hust.ttkien0311.smartlockdoor.helper.Helper.validatePasswordToken
 import vn.edu.hust.ttkien0311.smartlockdoor.network.PasswordReset
 import vn.edu.hust.ttkien0311.smartlockdoor.network.ServerApi
-import kotlin.concurrent.timer
 
 class ResetPasswordFragment : Fragment() {
     private lateinit var binding: FragmentResetPasswordBinding
@@ -56,7 +55,7 @@ class ResetPasswordFragment : Fragment() {
                 val seconds = millisUntilFinished / 1000
 
                 binding.countdown.visibility = View.VISIBLE
-                binding.countdown.text = " (${seconds}s)"
+                binding.countdown.text = "(${seconds}s)"
 
                 binding.resendTextView.isClickable = false
                 binding.resendTextView.setTextColor(ContextCompat.getColor(requireContext(), R.color.hint_text))
@@ -123,10 +122,10 @@ class ResetPasswordFragment : Fragment() {
                             confirmPasswordInput.text.toString().trim()
                         )
 
-                        activity?.let { showLoading(it) }
+                        showLoading(requireActivity())
                         delay(1000)
 
-                        val result = ServerApi.retrofitService.resetPassword(
+                        val result = ServerApi(requireActivity()).retrofitService.resetPassword(
                             passwordReset
                         )
 
@@ -143,7 +142,7 @@ class ResetPasswordFragment : Fragment() {
                         }
                     } catch (ex: Exception) {
                         hideLoading()
-                        activity?.let { handleException(ex, it) }
+                        handleException(ex, requireActivity())
                     }
                 }
             } else {
@@ -154,8 +153,8 @@ class ResetPasswordFragment : Fragment() {
         binding.resendTextView.setOnClickListener {
             lifecycleScope.launch {
                 try {
-                    activity?.let { showLoading(it) }
-                    val result = ServerApi.retrofitService.forgotPassword(args.email)
+                    showLoading(requireActivity())
+                    val result = ServerApi(requireActivity()).retrofitService.forgotPassword(args.email)
 
                     hideLoading()
                     timer.start()
@@ -170,7 +169,7 @@ class ResetPasswordFragment : Fragment() {
                     }
                 } catch (ex: Exception) {
                     hideLoading()
-                    activity?.let { handleException(ex, it) }
+                    handleException(ex, requireActivity())
                 }
             }
         }

@@ -10,7 +10,6 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/bg_color"
         android:gravity="center"
         android:orientation="vertical"
         tools:context=".ui.welcome.LoginFragment">
@@ -34,9 +33,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:background="@drawable/custom_edittext_focus"
+                android:background="@drawable/custom_edittext"
                 android:orientation="vertical"
-                android:padding="20dp">
+                android:padding="10dp">
 
                 <TextView
                     android:id="@+id/titleLogin"

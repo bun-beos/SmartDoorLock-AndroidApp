@@ -16,8 +16,9 @@ import vn.edu.hust.ttkien0311.smartlockdoor.databinding.FragmentRegisterBinding
 import vn.edu.hust.ttkien0311.smartlockdoor.helper.AlertDialogHelper.hideLoading
 import vn.edu.hust.ttkien0311.smartlockdoor.helper.AlertDialogHelper.showLoading
 import vn.edu.hust.ttkien0311.smartlockdoor.helper.ExceptionHelper.handleException
-import vn.edu.hust.ttkien0311.smartlockdoor.helper.ValidateHelper.validateEmail
-import vn.edu.hust.ttkien0311.smartlockdoor.helper.ValidateHelper.validatePassword
+import vn.edu.hust.ttkien0311.smartlockdoor.helper.Helper.validateEmail
+import vn.edu.hust.ttkien0311.smartlockdoor.helper.Helper.validatePassword
+import vn.edu.hust.ttkien0311.smartlockdoor.helper.Helper.validateUsername
 import vn.edu.hust.ttkien0311.smartlockdoor.network.AccountDto
 import vn.edu.hust.ttkien0311.smartlockdoor.network.ServerApi
 
@@ -45,6 +46,7 @@ class RegisterFragment : Fragment() {
         val passwordInput = binding.password
         val passwordLayout = binding.passwordL
         val usernameInput = binding.username
+        val usernameLayout = binding.usernameL
 
         emailInput.setOnFocusChangeListener { v, hasFocus ->
             if (!hasFocus) {
@@ -58,6 +60,12 @@ class RegisterFragment : Fragment() {
             }
         }
 
+        usernameInput.setOnFocusChangeListener { v, hasFocus ->
+            if (!hasFocus) {
+                validateUsername(usernameInput, usernameLayout)
+            }
+        }
+
         binding.toolbar.backButton.setOnClickListener {
             view.findNavController().popBackStack(R.id.welcomeFragment, false)
         }
@@ -65,8 +73,9 @@ class RegisterFragment : Fragment() {
         binding.buttonRegister.setOnClickListener {
             val emailChecked = validateEmail(emailInput, emailLayout)
             val passwordChecked = validatePassword(passwordInput, passwordLayout)
+            val usernameChecked = validateUsername(usernameInput, usernameLayout)
 
-            if (emailChecked && passwordChecked) {
+            if (emailChecked && passwordChecked && usernameChecked) {
                 lifecycleScope.launch {
                     val accountDto = AccountDto(
                         emailInput.text.toString().trim(),
@@ -74,9 +83,8 @@ class RegisterFragment : Fragment() {
                         usernameInput.text.toString().trim()
                     )
                     try {
-                        activity?.let { showLoading(it) }
-
-                        val response = ServerApi.retrofitService.register(accountDto)
+                        showLoading(requireActivity())
+                        val response = ServerApi(requireActivity()).retrofitService.register(accountDto)
                         Log.d("SLD", "Response: $response")
 
                         hideLoading()
@@ -89,7 +97,7 @@ class RegisterFragment : Fragment() {
                         view.findNavController().navigate(action)
                     } catch (ex : Exception) {
                         hideLoading()
-                        activity?.let { handleException(ex, it) }
+                        handleException(ex, requireActivity())
                     }
                 }
             }

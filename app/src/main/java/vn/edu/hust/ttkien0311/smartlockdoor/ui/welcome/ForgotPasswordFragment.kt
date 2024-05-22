@@ -16,7 +16,7 @@ import vn.edu.hust.ttkien0311.smartlockdoor.databinding.FragmentForgotPasswordBi
 import vn.edu.hust.ttkien0311.smartlockdoor.helper.AlertDialogHelper.hideLoading
 import vn.edu.hust.ttkien0311.smartlockdoor.helper.AlertDialogHelper.showLoading
 import vn.edu.hust.ttkien0311.smartlockdoor.helper.ExceptionHelper.handleException
-import vn.edu.hust.ttkien0311.smartlockdoor.helper.ValidateHelper.validateEmail
+import vn.edu.hust.ttkien0311.smartlockdoor.helper.Helper.validateEmail
 import vn.edu.hust.ttkien0311.smartlockdoor.network.ServerApi
 
 
@@ -61,9 +61,9 @@ class ForgotPasswordFragment : Fragment() {
             if (validateEmail(emailInput, emailLayout)) {
                 lifecycleScope.launch {
                     try {
-                        activity?.let { showLoading(it) }
+                        showLoading(requireActivity())
 
-                        val result = ServerApi.retrofitService.forgotPassword(
+                        val result = ServerApi(requireActivity()).retrofitService.forgotPassword(
                             emailInput.text.toString().trim()
                         )
 
@@ -80,7 +80,7 @@ class ForgotPasswordFragment : Fragment() {
                         }
                     } catch (ex: Exception) {
                         hideLoading()
-                        activity?.let { handleException(ex, it) }
+                        handleException(ex, requireActivity())
                     }
                 }
             } else {

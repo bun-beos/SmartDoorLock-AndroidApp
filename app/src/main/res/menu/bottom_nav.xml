@@ -2,14 +2,18 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/nav_home"
-        android:title="Chính"
+        android:title="@string/main"
         android:icon="@drawable/ic_home" />
     <item
-        android:id="@+id/nav_profile"
-        android:title="Tài khoản"
-        android:icon="@drawable/baseline_person_24" />
+        android:id="@+id/nav_member"
+        android:title="@string/member"
+        android:icon="@drawable/account_group" />
     <item
-        android:id="@+id/nav_setting"
-        android:title="Cài đặt"
-        android:icon="@drawable/ic_cog" />
+        android:id="@+id/nav_profile"
+        android:title="@string/personal"
+        android:icon="@drawable/baseline_person_24" />
+<!--    <item-->
+<!--        android:id="@+id/nav_setting"-->
+<!--        android:title="@string/setting"-->
+<!--        android:icon="@drawable/ic_cog" />-->
 </menu>

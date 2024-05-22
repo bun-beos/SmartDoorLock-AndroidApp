@@ -3,10 +3,12 @@ package vn.edu.hust.ttkien0311.smartlockdoor.helper
 import android.content.Context
 import androidx.security.crypto.EncryptedSharedPreferences
 import androidx.security.crypto.MasterKeys
+import java.text.SimpleDateFormat
+import java.util.Date
+import java.util.Locale
 
-class EncryptedSharedPreferencesManager(context : Context) {
+class  EncryptedSharedPreferencesManager(context: Context) {
     private val masterKeys = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
-
     private val sharedPreferences = EncryptedSharedPreferences.create(
         "token_shared_prefs",
         masterKeys,
@@ -35,13 +37,29 @@ class EncryptedSharedPreferencesManager(context : Context) {
         return sharedPreferences.getString("refresh_token", "").toString()
     }
 
-    fun saveLoginStatus(status : Boolean) {
+    fun saveRefreshTokenExpires(refreshTokeExpires: String) {
+        sharedPreferences.edit()
+            .putString("refresh_token_expires", refreshTokeExpires)
+            .apply()
+    }
+
+    fun getRefreshTokenExpires(): Date? {
+        val tokenExpires = sharedPreferences.getString("refresh_token_expires", "").toString()
+        return if (tokenExpires.isNotEmpty()) {
+            SimpleDateFormat(
+                "yyyy-MM-dd'T'HH:mm:ss",
+                Locale.getDefault()
+            ).parse(tokenExpires.substring(0, 20))
+        } else null
+    }
+
+    fun saveLoginStatus(status: Boolean) {
         sharedPreferences.edit()
             .putBoolean("is_login", status)
             .apply()
     }
 
-    fun getLoginStatus() : Boolean {
+    fun getLoginStatus(): Boolean {
         return sharedPreferences.getBoolean("is_login", false)
     }
 }

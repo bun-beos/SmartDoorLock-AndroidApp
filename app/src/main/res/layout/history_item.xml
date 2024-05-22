@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="image"
+            type="vn.edu.hust.ttkien0311.smartlockdoor.network.Image" />
+
+        <variable
+            name="clickListener"
+            type="vn.edu.hust.ttkien0311.smartlockdoor.ui.main.home.HistoryRowListener" />
+    </data>
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:onClick="@{() -> clickListener.onClick(image)}"
+        app:cardCornerRadius="6dp">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/white"
+            android:paddingStart="8dp"
+            android:paddingTop="10dp"
+            android:paddingEnd="8dp"
+            android:paddingBottom="10dp">
+
+            <TextView
+                android:layout_width="45dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.5"
+                android:text="@{image.memberName}"
+                android:textColor="@color/black"
+                tools:text="@tools:sample/full_names" />
+
+            <TextView
+                android:layout_width="30dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@{image.createdDate}"
+                android:textColor="@color/black"
+                tools:text="@tools:sample/date/ddmmyy" />
+
+            <ImageView
+                android:layout_width="16dp"
+                android:layout_height="16dp"
+                android:layout_gravity="center_vertical"
+                android:src="@drawable/baseline_arrow_forward_ios_24"
+                app:tint="@color/hint_text" />
+
+        </LinearLayout>
+    </androidx.cardview.widget.CardView>
+</layout>
