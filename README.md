@@ -1,4 +1,4 @@
-# Smart Lock Door Android Application
+# Smart Door Lock Android Application
 ## Ứng dụng quản lý vào ra sử dụng khóa cửa nhận diện khuôn mặt
 ## Các chức năng chính
 - Đăng nhập, đăng ký tài khoản
