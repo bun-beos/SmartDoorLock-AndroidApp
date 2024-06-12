@@ -13,12 +13,13 @@ import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.core.graphics.drawable.toBitmap
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import com.github.dhaval2404.imagepicker.ImagePicker
 import kotlinx.coroutines.launch
 import vn.edu.hust.ttkien0311.smartlockdoor.R
-import vn.edu.hust.ttkien0311.smartlockdoor.WelcomeActivity
+import vn.edu.hust.ttkien0311.smartlockdoor.ui.welcome.WelcomeActivity
 import vn.edu.hust.ttkien0311.smartlockdoor.databinding.FragmentProfileBinding
 import vn.edu.hust.ttkien0311.smartlockdoor.helper.AlertDialogHelper.hideLoading
 import vn.edu.hust.ttkien0311.smartlockdoor.helper.AlertDialogHelper.showLoading
@@ -29,6 +30,7 @@ import vn.edu.hust.ttkien0311.smartlockdoor.network.ServerApi
 
 class ProfileFragment : Fragment() {
     private lateinit var binding: FragmentProfileBinding
+    private val viewModel: ProfileViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,20 +44,33 @@ class ProfileFragment : Fragment() {
     ): View {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_profile, container, false)
+        binding.lifecycleOwner = this
+        binding.viewModel = viewModel
 
-        lifecycleScope.launch {
-            try {
-                val response = ServerApi(requireActivity()).retrofitService.getAccountInfo()
-                binding.account = response
-            } catch (ex: Exception) {
-                handleException(ex, requireActivity())
-            }
+        if (viewModel.account.value == null) {
+            getAccount()
+        }
+
+        binding.swipeRefreshLayout.setColorSchemeColors(
+            resources.getColor(
+                R.color.link_color,
+                null
+            )
+        )
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            getAccount()
+            hideLoading()
         }
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        if (viewModel.account.value == null) {
+            binding.logOut.visibility = View.INVISIBLE
+        } else {
+            binding.logOut.visibility = View.VISIBLE
+        }
 
         binding.userImage.setOnClickListener {
             ImagePicker.with(this)
@@ -76,6 +91,10 @@ class ProfileFragment : Fragment() {
 
         binding.changePassword.setOnClickListener {
             view.findNavController().navigate(R.id.action_profileFragment_to_changePasswordFragment)
+        }
+
+        binding.checkDoor.setOnClickListener {
+            view.findNavController().navigate(R.id.action_profileFragment_to_doorFragment)
         }
 
         binding.logOut.setOnClickListener {
@@ -158,10 +177,30 @@ class ProfileFragment : Fragment() {
         sharedPreferencesManager.saveAccessToken("")
         sharedPreferencesManager.saveRefreshToken("")
         sharedPreferencesManager.saveRefreshTokenExpires("")
+        sharedPreferencesManager.saveAccountId("")
+        sharedPreferencesManager.saveSelectedDevice("")
         sharedPreferencesManager.saveLoginStatus(false)
 
         val intent = Intent(requireActivity(), WelcomeActivity::class.java)
         startActivity(intent)
         requireActivity().finish()
+    }
+
+    private fun getAccount() {
+        lifecycleScope.launch {
+            try {
+                showLoading(requireActivity())
+                val response = ServerApi(requireActivity()).retrofitService.getAccountInfo()
+                hideLoading()
+
+                viewModel.setAccount(response)
+                binding.logOut.visibility = View.VISIBLE
+            } catch (ex: Exception) {
+                hideLoading()
+                handleException(ex, requireActivity())
+                binding.logOut.visibility = View.GONE
+            }
+            binding.swipeRefreshLayout.isRefreshing = false
+        }
     }
 }

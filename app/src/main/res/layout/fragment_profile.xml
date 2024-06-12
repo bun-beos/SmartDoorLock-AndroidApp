@@ -6,154 +6,227 @@
     <data>
 
         <variable
-            name="account"
-            type="vn.edu.hust.ttkien0311.smartlockdoor.network.Account" />
+            name="viewModel"
+            type="vn.edu.hust.ttkien0311.smartlockdoor.ui.main.profile.ProfileViewModel" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/nav_host"
-        android:name="androidx.navigation.fragment.NavHostFragment"
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="@color/bg_color"
-        app:defaultNavHost="true"
-        app:navGraph="@navigation/nav_graph_main"
-        tools:context=".ui.main.profile.ProfileFragment">
+        android:layout_height="match_parent">
 
-        <com.google.android.material.imageview.ShapeableImageView
-            android:id="@+id/userImage"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            imageUrl="@{account.userImage}"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.1"
-            app:shapeAppearanceOverlay="@style/circular"
-            app:srcCompat="@drawable/ic_account_circle"
-            app:strokeColor="@color/white"
-            app:strokeWidth="2dp" />
-
-        <TextView
-            android:id="@+id/usename"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:text="@{account.username}"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/userImage"
-            tools:text="@tools:sample/full_names" />
-
-        <TextView
-            android:id="@+id/email"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:text="@{account.email}"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/usename"
-            tools:text="@tools:sample/full_names" />
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/changeUsername"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/nav_host"
+            android:name="androidx.navigation.fragment.NavHostFragment"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="50dp"
-            android:layout_marginEnd="16dp"
-            app:cardCornerRadius="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/email">
+            android:layout_height="match_parent"
+            android:background="@color/bg_color"
+            app:defaultNavHost="true"
+            app:navGraph="@navigation/nav_graph_main"
+            tools:context=".ui.main.profile.ProfileFragment">
 
-            <LinearLayout
-                android:layout_width="match_parent"
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/userImage"
+                imageUrl="@{viewModel.account.userImage}"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.1"
+                app:shapeAppearanceOverlay="@style/circular"
+                app:srcCompat="@drawable/ic_account_circle"
+                app:strokeColor="@color/white"
+                app:strokeWidth="2dp" />
+
+            <TextView
+                android:id="@+id/usename"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:background="@color/white"
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp">
+                android:layout_marginTop="12dp"
+                android:text="@{viewModel.account.username}"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/userImage"
+                tools:text="@tools:sample/full_names" />
 
-                <TextView
-                    android:layout_width="0dp"
+            <TextView
+                android:id="@+id/email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@{viewModel.account.email}"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/usename"
+                tools:text="@tools:sample/full_names" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/changeUsername"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="50dp"
+                android:layout_marginEnd="16dp"
+                app:cardCornerRadius="8dp"
+                app:layout_constraintTop_toBottomOf="@+id/email">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/user_name_label"
-                    android:textSize="16sp" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="2.5"
-                    android:paddingStart="0dp"
-                    android:paddingEnd="6dp"
-                    android:text="@{account.username}"
-                    android:textAlignment="viewEnd"
-                    android:textColor="@color/gray"
-                    tools:text="@tools:sample/full_names" />
-
-                <ImageView
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
                     android:layout_gravity="center_vertical"
-                    android:src="@drawable/baseline_arrow_forward_ios_24"
-                    app:tint="@color/blur" />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
+                    android:background="@color/white"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp">
 
-        <androidx.cardview.widget.CardView
-            android:id="@+id/changePassword"
-            android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="16dp"
-            app:cardCornerRadius="8dp"
-            app:layout_constraintTop_toBottomOf="@+id/changeUsername">
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/user_name_label"
+                        android:textSize="16sp" />
 
-            <LinearLayout
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="2.5"
+                        android:paddingStart="0dp"
+                        android:paddingEnd="6dp"
+                        android:text="@{viewModel.account.username}"
+                        android:textAlignment="viewEnd"
+                        android:textColor="@color/gray"
+                        tools:text="@tools:sample/full_names" />
+
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:layout_gravity="center_vertical"
+                        android:src="@drawable/baseline_arrow_forward_ios_24"
+                        app:tint="@color/blur" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/changePassword"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:background="@color/white"
-                android:paddingStart="10dp"
-                android:paddingEnd="10dp">
+                android:layout_height="50dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="16dp"
+                app:cardCornerRadius="8dp"
+                app:layout_constraintTop_toBottomOf="@+id/changeUsername">
 
-                <TextView
-                    android:layout_width="0dp"
+                <LinearLayout
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/change_password"
-                    android:textSize="16sp" />
+                    android:layout_gravity="center_vertical"
+                    android:background="@color/white"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp">
 
-                <ImageView
-                    android:layout_width="18dp"
-                    android:layout_height="18dp"
-                    android:src="@drawable/baseline_arrow_forward_ios_24"
-                    app:tint="@color/blur" />
-            </LinearLayout>
-        </androidx.cardview.widget.CardView>
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/change_password"
+                        android:textSize="16sp" />
 
-        <Button
-            android:id="@+id/logOut"
-            android:layout_width="200dp"
-            android:layout_height="60dp"
-            android:backgroundTint="@color/white"
-            android:text="@string/log_out"
-            android:textColor="@color/error"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.95" />
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:src="@drawable/baseline_arrow_forward_ios_24"
+                        app:tint="@color/blur" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <androidx.cardview.widget.CardView
+                android:id="@+id/checkDoor"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="16dp"
+                app:cardCornerRadius="8dp"
+                app:layout_constraintTop_toBottomOf="@+id/changePassword">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:background="@color/white"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/check_door"
+                        android:textSize="16sp" />
+
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:src="@drawable/baseline_arrow_forward_ios_24"
+                        app:tint="@color/blur" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/allDevices"
+                android:layout_width="match_parent"
+                android:layout_height="50dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="16dp"
+                app:cardCornerRadius="8dp"
+                app:layout_constraintTop_toBottomOf="@+id/checkDoor">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:background="@color/white"
+                    android:paddingStart="10dp"
+                    android:paddingEnd="10dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/all_devices"
+                        android:textSize="16sp" />
+
+                    <ImageView
+                        android:layout_width="18dp"
+                        android:layout_height="18dp"
+                        android:src="@drawable/baseline_arrow_forward_ios_24"
+                        app:tint="@color/blur" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <Button
+                android:id="@+id/logOut"
+                android:layout_width="150dp"
+                android:layout_height="50dp"
+                android:backgroundTint="@color/white"
+                android:text="@string/log_out"
+                android:textColor="@color/error"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.95" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
 </layout>

@@ -7,7 +7,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class  EncryptedSharedPreferencesManager(context: Context) {
+class EncryptedSharedPreferencesManager(context: Context) {
     private val masterKeys = MasterKeys.getOrCreate(MasterKeys.AES256_GCM_SPEC)
     private val sharedPreferences = EncryptedSharedPreferences.create(
         "token_shared_prefs",
@@ -61,5 +61,25 @@ class  EncryptedSharedPreferencesManager(context: Context) {
 
     fun getLoginStatus(): Boolean {
         return sharedPreferences.getBoolean("is_login", false)
+    }
+
+    fun saveSelectedDevice(deviceId: String) {
+        sharedPreferences.edit()
+            .putString("device_id", deviceId)
+            .apply()
+    }
+
+    fun getSelectedDevice(): String {
+        return sharedPreferences.getString("device_id", "").toString()
+    }
+
+    fun saveAccountId(accountId: String) {
+        sharedPreferences.edit()
+            .putString("account_id", accountId)
+            .apply()
+    }
+    
+    fun getAccountId(): String {
+        return sharedPreferences.getString("account_id", "").toString()
     }
 }

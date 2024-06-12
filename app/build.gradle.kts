@@ -12,7 +12,7 @@ android {
 
     defaultConfig {
         applicationId = "vn.edu.hust.ttkien0311.smartlockdoor"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
@@ -57,7 +57,6 @@ dependencies {
     implementation("androidx.navigation:navigation-fragment-ktx:2.7.7")
     implementation("androidx.navigation:navigation-ui-ktx:2.7.7")
 
-
     // Retrofit
     implementation ("com.squareup.retrofit2:retrofit:2.9.0")
     implementation ("com.squareup.retrofit2:converter-moshi:2.9.0")
@@ -76,4 +75,7 @@ dependencies {
 
     // Image picker
     implementation ("com.github.dhaval2404:imagepicker:2.1")
+
+    // Swipe refresh layout
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.2.0-alpha01")
 }

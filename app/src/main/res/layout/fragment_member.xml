@@ -29,7 +29,7 @@
                 android:layout_weight="1"
                 android:text="@string/list_member"
                 android:textColor="@color/white"
-                android:textSize="20sp" />
+                android:textSize="22sp" />
 
             <ImageView
                 android:id="@+id/magnify_icon"
@@ -48,16 +48,35 @@
                 android:src="@drawable/baseline_add_circle_outline_24" />
         </LinearLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/list_member"
+        <TextView
+            android:id="@+id/emptyContent"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:gravity="center"
+            android:text="@string/empty_content"
+            android:textColor="@color/hint_text"
+            android:textSize="18sp"
+            android:textStyle="italic"
+            android:visibility="visible"
+            app:layout_constraintTop_toBottomOf="@id/linearLayout" />
+
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefreshLayout"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:paddingStart="8dp"
-            android:paddingEnd="8dp"
-            android:scrollbars="vertical"
-            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout"
-            tools:listitem="@layout/member_item"/>
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/list_member"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scrollbars="vertical"
+                android:visibility="invisible"
+                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                app:layout_constraintBottom_toBottomOf="parent"
+                tools:listitem="@layout/member_item" />
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

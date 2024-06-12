@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Smart Lock Door</string>
     <string name="default_notification_channel_id">notification_channel</string>
-    <string name="default_notification_channel_name">vn.edu.hust.ttkien0311.smartlockdoor</string>
+    <string name="default_notification_channel_name">Khóa cửa</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="close_the_door">Đóng cửa</string>
     <string name="open_the_door">Mở cửa</string>
@@ -41,6 +41,16 @@
     <string name="date_of_birth">Ngày sinh</string>
     <string name="phone_number">Số điện thoại</string>
     <string name="dd_mm_yyyy">dd/mm/yyyy</string>
-    <string name="created_date">Thời gian được thêm</string>
+    <string name="created_date">Thời gian đăng ký</string>
     <string name="created_by">Người thêm</string>
+    <string name="empty_content">Trống</string>
+    <string name="notification">Thông báo</string>
+    <string name="check_door">Kiểm tra cửa</string>
+    <string name="all_devices">Tất cả thiết bị</string>
+    <string name="account">Tài khoản</string>
+    <string name="my_device">Thiết bị của tôi</string>
+    <string name="no_device">Danh sách trống</string>
+    <string name="search">Tìm kiếm</string>
+    <string name="list">Danh sách</string>
+    <string name="grid">Lưới</string>
 </resources>

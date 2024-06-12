@@ -34,7 +34,7 @@
             android:resource="@color/black" />
 
         <activity
-            android:name=".WelcomeActivity"
+            android:name=".ui.welcome.WelcomeActivity"
             android:exported="true"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -45,7 +45,7 @@
         </activity>
 
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.main.MainActivity"
             android:screenOrientation="portrait" />
 
         <service

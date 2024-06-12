@@ -80,7 +80,8 @@ class RegisterFragment : Fragment() {
                     val accountDto = AccountDto(
                         emailInput.text.toString().trim(),
                         passwordInput.text.toString().trim(),
-                        usernameInput.text.toString().trim()
+                        usernameInput.text.toString().trim(),
+                        ""
                     )
                     try {
                         showLoading(requireActivity())

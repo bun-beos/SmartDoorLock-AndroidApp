@@ -101,7 +101,6 @@ class MemberEditFragment : Fragment() {
         return binding.root
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -145,7 +144,6 @@ class MemberEditFragment : Fragment() {
         })
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         when (resultCode) {
@@ -174,7 +172,6 @@ class MemberEditFragment : Fragment() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun followInput() {
         if (!name.text.isNullOrEmpty() && name.text.toString()
                 .trim() == viewModel.member.value?.memberName && !dateOfBirth.text.isNullOrEmpty() && dateOfBirth.text.toString()
@@ -196,8 +193,7 @@ class MemberEditFragment : Fragment() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun clickUpdateBtn() {
+     fun clickUpdateBtn() {
         if (binding.memberImage.drawable != null) {
             imageChecked = true
         } else {
@@ -265,6 +261,7 @@ class MemberEditFragment : Fragment() {
 
                     val memberDto = MemberDto(
                         name.text.toString().trim(),
+                        args.deviceId,
                         imgBase64,
                         inputDate,
                         phone
@@ -282,7 +279,7 @@ class MemberEditFragment : Fragment() {
                     if (res != null) {
                         hideLoading()
                         res.dateOfBirth = formatDateTime(res.dateOfBirth, "dd/MM/yyyy")
-                        res.createdDate = formatDateTime(res.createdDate, "dd/MM/yyyy  HH:mm:ss")
+                        res.createdDate = formatDateTime(res.createdDate, "HH:mm - dd/MM/yyyy")
                         viewModel.onMemberRowClicked(res)
 
                         AlertDialog.Builder(requireActivity())

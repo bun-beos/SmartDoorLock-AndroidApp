@@ -11,19 +11,16 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import vn.edu.hust.ttkien0311.smartlockdoor.R
 import vn.edu.hust.ttkien0311.smartlockdoor.databinding.FragmentHistoryDetailBinding
-import vn.edu.hust.ttkien0311.smartlockdoor.helper.AlertDialogHelper
 import vn.edu.hust.ttkien0311.smartlockdoor.helper.AlertDialogHelper.hideLoading
 import vn.edu.hust.ttkien0311.smartlockdoor.helper.AlertDialogHelper.showLoading
-import vn.edu.hust.ttkien0311.smartlockdoor.helper.EncryptedSharedPreferencesManager
 import vn.edu.hust.ttkien0311.smartlockdoor.network.ServerApi
 
 class HistoryDetailFragment : Fragment() {
     private lateinit var binding: FragmentHistoryDetailBinding
-    private val viewModel: HistoryViewModel by activityViewModels()
+    private val viewModel: HomeViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

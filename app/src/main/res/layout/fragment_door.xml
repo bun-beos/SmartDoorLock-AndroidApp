@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipeRefreshLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/bg_color"
+            tools:context=".ui.main.DoorFragment">
+
+            <include
+                android:id="@+id/toolbar"
+                layout="@layout/toolbar" />
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/imageCardView"
+                android:layout_width="300dp"
+                android:layout_height="300dp"
+                android:layout_marginTop="20dp"
+                app:cardCornerRadius="8dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/toolbar">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    tools:src="@tools:sample/avatars" />
+            </androidx.cardview.widget.CardView>
+
+            <androidx.cardview.widget.CardView
+                android:id="@+id/cardView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="20dp"
+                app:cardCornerRadius="8dp"
+                app:layout_constraintTop_toBottomOf="@id/imageCardView">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:paddingTop="20dp"
+                    android:paddingBottom="20dp">
+
+                    <ImageButton
+                        android:id="@+id/imageModeButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:src="@drawable/ic_image_area"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.28"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/imageModeText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Chế độ ảnh"
+                        android:textColor="@color/hint_text"
+                        android:textSize="11sp"
+                        app:layout_constraintEnd_toEndOf="@id/imageModeButton"
+                        app:layout_constraintStart_toStartOf="@id/imageModeButton"
+                        app:layout_constraintTop_toBottomOf="@id/imageModeButton" />
+
+
+                    <ImageButton
+                        android:id="@+id/videoModeButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/white"
+                        android:src="@drawable/ic_video"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.72"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <TextView
+                        android:id="@+id/videoModeText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Chế độ video"
+                        android:textColor="@color/hint_text"
+                        android:textSize="11sp"
+                        app:layout_constraintEnd_toEndOf="@id/videoModeButton"
+                        app:layout_constraintStart_toStartOf="@id/videoModeButton"
+                        app:layout_constraintTop_toBottomOf="@id/videoModeButton" />
+
+                    <ImageButton
+                        android:id="@+id/captureImageButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:background="@color/white"
+                        android:src="@drawable/ic_camera_iris"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.28"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/imageModeText" />
+
+                    <TextView
+                        android:id="@+id/captureImageText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Lấy ảnh mới"
+                        android:textColor="@color/enable_image_button_color"
+                        android:textSize="11sp"
+                        app:layout_constraintEnd_toEndOf="@id/captureImageButton"
+                        app:layout_constraintStart_toStartOf="@id/captureImageButton"
+                        app:layout_constraintTop_toBottomOf="@id/captureImageButton" />
+
+                    <ImageButton
+                        android:id="@+id/doorStateButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:background="@color/white"
+                        android:src="@drawable/ic_door_closed"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.72"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/videoModeText" />
+
+                    <TextView
+                        android:id="@+id/doorStateText"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Đang đóng"
+                        android:textColor="@color/hint_text"
+                        android:textSize="11sp"
+                        app:layout_constraintEnd_toEndOf="@id/doorStateButton"
+                        app:layout_constraintStart_toStartOf="@id/doorStateButton"
+                        app:layout_constraintTop_toBottomOf="@id/doorStateButton" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </androidx.cardview.widget.CardView>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+</layout>

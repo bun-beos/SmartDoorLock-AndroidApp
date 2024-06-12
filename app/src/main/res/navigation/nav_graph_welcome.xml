@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_welcomeFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_welcomeFragment_to_notificationDetailFragment"
+            app:destination="@id/notificationDetailFragment" />
     </fragment>
     <fragment
         android:id="@+id/registerFragment"
@@ -80,4 +83,9 @@
             android:defaultValue=""
             app:argType="string" />
     </fragment>
+    <fragment
+        android:id="@+id/notificationDetailFragment"
+        android:name="vn.edu.hust.ttkien0311.smartlockdoor.ui.main.NotificationDetailFragment"
+        android:label="NotificationDetailFragment"
+        tools:layout="@layout/fragment_notification_detail"/>
 </navigation>

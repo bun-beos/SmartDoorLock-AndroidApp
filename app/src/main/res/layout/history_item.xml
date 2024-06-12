@@ -17,24 +17,26 @@
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/card_label_background"
         android:onClick="@{() -> clickListener.onClick(image)}"
         app:cardCornerRadius="6dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/white"
-            android:paddingStart="8dp"
-            android:paddingTop="10dp"
-            android:paddingEnd="8dp"
-            android:paddingBottom="10dp">
+            android:paddingStart="10dp"
+            android:paddingTop="12dp"
+            android:paddingEnd="10dp"
+            android:orientation="horizontal"
+            android:paddingBottom="12dp">
 
             <TextView
-                android:layout_width="45dp"
+                android:layout_width="60dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1.5"
+                android:layout_weight="2"
                 android:text="@{image.memberName}"
+                android:textSize="15sp"
                 android:textColor="@color/black"
                 tools:text="@tools:sample/full_names" />
 
@@ -43,6 +45,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@{image.createdDate}"
+                android:textSize="15sp"
                 android:textColor="@color/black"
                 tools:text="@tools:sample/date/ddmmyy" />
 
@@ -50,6 +53,7 @@
                 android:layout_width="16dp"
                 android:layout_height="16dp"
                 android:layout_gravity="center_vertical"
+                android:visibility="gone"
                 android:src="@drawable/baseline_arrow_forward_ios_24"
                 app:tint="@color/hint_text" />
 

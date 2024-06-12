@@ -15,6 +15,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.github.dhaval2404.imagepicker.ImagePicker
 import kotlinx.coroutines.launch
 import vn.edu.hust.ttkien0311.smartlockdoor.R
@@ -31,6 +32,7 @@ import vn.edu.hust.ttkien0311.smartlockdoor.network.ServerApi
 class MemberDetailFragment : Fragment() {
     private lateinit var binding: FragmentMemberDetailBinding
     private val viewModel: MemberViewModel by activityViewModels()
+    private val args: MemberDetailFragmentArgs by navArgs()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,7 +43,8 @@ class MemberDetailFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_member_detail, container, false)
+        binding =
+            DataBindingUtil.inflate(inflater, R.layout.fragment_member_detail, container, false)
         binding.lifecycleOwner = this
         binding.viewModel = viewModel
         binding.toolbar.title.text = "Chi tiết"
@@ -56,15 +59,23 @@ class MemberDetailFragment : Fragment() {
         }
 
         binding.editInfoButton.setOnClickListener {
-            val action = MemberDetailFragmentDirections.actionMemberDetailFragmentToMemberEditFragment(State.EDIT.toString())
+            val action =
+                MemberDetailFragmentDirections.actionMemberDetailFragmentToMemberEditFragment(State.EDIT.toString(), args.deviceId)
             findNavController().navigate(action)
         }
 
         binding.memberHistoryDetail.setOnClickListener {
-            val action = MemberDetailFragmentDirections.actionMemberDetailFragmentToMemberHistoryFragment(viewModel.member.value!!.memberId)
+            val action =
+                MemberDetailFragmentDirections.actionMemberDetailFragmentToMemberHistoryFragment(
+                    viewModel.member.value!!.memberId,
+                    args.deviceId
+                )
             findNavController().navigate(action)
         }
 
+        if (viewModel.member.value?.memberId == "af0d5d06-23ad-436a-a9e8-c5de1d4f94fa") {
+            binding.deleteButton.visibility = View.GONE
+        }
         binding.deleteButton.setOnClickListener {
             val alertDialog =
                 AlertDialog.Builder(requireActivity())

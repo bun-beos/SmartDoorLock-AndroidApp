@@ -9,14 +9,15 @@ import retrofit2.http.PUT
 import retrofit2.http.Path
 import retrofit2.http.Query
 import java.time.LocalDate
-import java.time.LocalDateTime
 
 private const val accounts_url = "/api/v1/Accounts"
 private const val members_url = "/api/v1/Members"
 private const val images_url = "/api/v1/Images"
+private const val notifications_url = "/api/v1/Notifications"
+private const val device_url = "/api/v1/Devices"
 
 interface ServerApiService {
-    // Account
+    // Account*********************************************
     // Đăng ký tài khoản
     @POST("${accounts_url}/Registration")
     suspend fun register(@Body accountDto: AccountDto): Int
@@ -60,15 +61,16 @@ interface ServerApiService {
     // Xóa tài khoản
     @DELETE("${accounts_url}/Deletion")
     suspend fun deleteAccount(@Body password: String): Int
+    //***********************************************************
 
-    // Member
+    // Member****************************************************
     // Thêm mới thành viên
     @POST("${members_url}/NewMember")
     suspend fun createMember(@Body memberDto: MemberDto): Member?
 
     // Lấy danh sách thành viên
     @GET(members_url)
-    suspend fun getAllMember(): List<Member>
+    suspend fun getAllByDeviceMember(@Query("deviceId") deviceId: String): List<Member>
 
     // Lấy thông tin thành viên theo id
     @GET("${members_url}/{id}")
@@ -87,26 +89,75 @@ interface ServerApiService {
 
     // Xóa nhiều thành viên
     @DELETE(members_url)
-    suspend fun deleteManyMember(@Body listId: List<String>): Int
+    suspend fun deleteManyMembers(@Body listId: List<String>): Int
+    //***********************************************************
 
-    // Image
+    // Image*****************************************************
     // Lấy thời gian ảnh cũ nhất
-    @GET("${images_url}/OldestTime")
-    suspend fun getOldestTime() : String
+    @GET("${images_url}/OldestTime/{deviceId}")
+    suspend fun getOldestTime(@Path("deviceId") deviceId: String): String
 
     // Lấy ảnh theo thành viên hoặc thời gian
     @GET(images_url)
     suspend fun filterImage(
+        @Query("deviceId") deviceId: String,
         @Query("memberId") memberId: String?,
         @Query("startDate") startDate: LocalDate?,
         @Query("endDate") endDate: LocalDate?
-    ) : List<Image>
+    ): List<Image>
+
+    // Lấy ảnh theo id thông báo
+    @GET("${images_url}/{notifId}")
+    suspend fun getByNotifId(@Path("notifId") notifId: String): Image?
 
     // Xóa ảnh theo id
     @DELETE("${images_url}/{id}")
-    suspend fun deleteImage(@Path("id") id : String) : Int
+    suspend fun deleteImage(@Path("id") id: String): Int
 
     // Xóa nhiều ảnh
     @DELETE(images_url)
-    suspend fun deleteManyImage(@Body listId: List<String>) : Int
+    suspend fun deleteManyImages(@Body listId: List<String>): Int
+    //***********************************************************
+
+    // Notification**********************************************
+    // Lấy danh sách thông báo
+    @GET("${notifications_url}/Filter")
+    suspend fun FilterNotification(
+        @Query("accountId") accountId: String,
+        @Query("deviceId") deviceId: String? = null
+    ): List<Notification>
+
+    // Cập nhập trạng thái thông báo
+    @PUT("${notifications_url}/{id}")
+    suspend fun updateNotification(@Path("id") id: String): Int
+
+    // Cập nhập trạng thái nhiều thông báo
+    @PUT(notifications_url)
+    suspend fun updateNotification(@Body listId: List<String>): Int
+
+    // Xóa 1 thông báo
+    @DELETE("${notifications_url}/{id}")
+    suspend fun deleteNotification(@Path("id") id: String): Int
+
+    // Xóa nhiều thông báo
+    @DELETE(notifications_url)
+    suspend fun deleteManyNotifications(@Body listId: List<String>): Int
+    //***********************************************************
+
+    // Device******************************************************
+    // Lấy tất cả thông tin thiết bị
+    @GET(device_url)
+    suspend fun getAllDevice(): List<Device>
+
+    // Lấy thông tin thiết bị theo accountId
+    @GET("${device_url}/{accountId}")
+    suspend fun getDevice(@Path("accountId") accountId: String): List<Device>
+
+    // Cập nhập thông tin thiết bị
+    @PUT(device_url)
+    suspend fun updateDevice(@Body device: Device): Int
+
+    // Xóa thông tin thiết bị
+    @DELETE("${device_url}/{deviceId}")
+    suspend fun deleteDevice(@Path("deviceId") id: String): Int
 }

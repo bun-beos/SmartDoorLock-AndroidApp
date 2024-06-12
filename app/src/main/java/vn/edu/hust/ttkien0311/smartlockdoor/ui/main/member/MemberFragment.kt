@@ -1,6 +1,5 @@
 package vn.edu.hust.ttkien0311.smartlockdoor.ui.main.member
 
-import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -8,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.addCallback
-import androidx.annotation.RequiresApi
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
@@ -16,15 +14,17 @@ import androidx.navigation.fragment.findNavController
 import kotlinx.coroutines.launch
 import vn.edu.hust.ttkien0311.smartlockdoor.R
 import vn.edu.hust.ttkien0311.smartlockdoor.databinding.FragmentMemberBinding
+import vn.edu.hust.ttkien0311.smartlockdoor.helper.AlertDialogHelper.hideLoading
+import vn.edu.hust.ttkien0311.smartlockdoor.helper.AlertDialogHelper.showLoading
+import vn.edu.hust.ttkien0311.smartlockdoor.helper.EncryptedSharedPreferencesManager
 import vn.edu.hust.ttkien0311.smartlockdoor.helper.ExceptionHelper.handleException
-import vn.edu.hust.ttkien0311.smartlockdoor.helper.Helper
 import vn.edu.hust.ttkien0311.smartlockdoor.helper.Helper.formatDateTime
-import vn.edu.hust.ttkien0311.smartlockdoor.network.Member
 import vn.edu.hust.ttkien0311.smartlockdoor.network.ServerApi
 
 class MemberFragment : Fragment() {
     private lateinit var binding: FragmentMemberBinding
     private val viewModel: MemberViewModel by activityViewModels()
+    private var currentDeviceId = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -33,33 +33,42 @@ class MemberFragment : Fragment() {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        binding =  DataBindingUtil.inflate(inflater, R.layout.fragment_member, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_member, container, false)
+        binding.lifecycleOwner = this
+        val sharedPreferencesManager = EncryptedSharedPreferencesManager(requireActivity())
+        currentDeviceId = sharedPreferencesManager.getSelectedDevice()
 
-        var listMember: List<Member>
-        lifecycleScope.launch {
-            try {
-                val res = ServerApi(requireActivity()).retrofitService.getAllMember()
-                for (member in res) {
-                    member.createdDate = formatDateTime(member.createdDate, "dd/MM/yyyy  HH:mm:ss")
-                    member.modifiedDate = formatDateTime(member.modifiedDate, "dd/MM/yyyy  HH:mm:ss")
-                    member.dateOfBirth = formatDateTime(member.dateOfBirth, "dd/MM/yyyy")
-                }
-                listMember = res
-            } catch (ex: Exception) {
-                listMember = emptyList()
-                handleException(ex, requireActivity())
+        if (currentDeviceId.isNotEmpty()) {
+            if (viewModel.members.value == null) {
+                getListMember()
+            } else {
+                binding.listMember.adapter =
+                    MemberAdapter(viewModel.members.value!!, MemberItemListener { member ->
+                        viewModel.onMemberRowClicked(member)
+                        val action = MemberFragmentDirections.actionMemberFragmentToMemberDetailFragment(currentDeviceId)
+                        findNavController().navigate(action)
+                    })
+                binding.listMember.visibility = View.VISIBLE
+                binding.emptyContent.visibility = View.GONE
             }
-            binding.listMember.adapter = MemberAdapter(listMember, MemberItemListener { member ->
-                viewModel.onMemberRowClicked(member)
-                findNavController().navigate(R.id.action_memberFragment_to_memberDetailFragment)
-            })
         }
+
+        binding.swipeRefreshLayout.setColorSchemeColors(
+            resources.getColor(
+                R.color.link_color,
+                null
+            )
+        )
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            getListMember()
+            hideLoading()
+        }
+
         return binding.root
     }
 
@@ -71,8 +80,48 @@ class MemberFragment : Fragment() {
 
         binding.addCircleIcon.setOnClickListener {
             viewModel.onMemberRowClicked(null)
-            val action = MemberFragmentDirections.actionMemberFragmentToMemberEditFragment(State.ADD.toString())
+            val action =
+                MemberFragmentDirections.actionMemberFragmentToMemberEditFragment(
+                    State.ADD.toString(),
+                    currentDeviceId
+                )
             findNavController().navigate(action)
+        }
+    }
+
+    private fun getListMember() {
+        lifecycleScope.launch {
+            try {
+                showLoading(requireActivity())
+                val res = ServerApi(requireActivity()).retrofitService.getAllByDeviceMember(
+                    currentDeviceId
+                )
+                hideLoading()
+
+                if (res.isNotEmpty()) {
+                    for (member in res) {
+                        member.createdDate =
+                            formatDateTime(member.createdDate, "HH:mm - dd/MM/yyyy")
+                        member.dateOfBirth = formatDateTime(member.dateOfBirth, "dd/MM/yyyy")
+                    }
+                    viewModel.setListMember(res)
+
+                    binding.listMember.adapter =
+                        MemberAdapter(viewModel.members.value!!, MemberItemListener { member ->
+                            viewModel.onMemberRowClicked(member)
+                            findNavController().navigate(R.id.action_memberFragment_to_memberDetailFragment)
+                        })
+                    binding.listMember.visibility = View.VISIBLE
+                    binding.emptyContent.visibility = View.GONE
+                }
+            } catch (ex: Exception) {
+                hideLoading()
+                handleException(ex, requireActivity())
+
+                binding.listMember.visibility = View.GONE
+                binding.emptyContent.visibility = View.VISIBLE
+            }
+            binding.swipeRefreshLayout.isRefreshing = false
         }
     }
 }

@@ -18,6 +18,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
         android:onClick="@{()->clickListener.onClick(member)}"
         app:cardCornerRadius="6dp">
 
@@ -34,7 +36,7 @@
                 imageUrl="@{member.memberPhoto}"
                 android:layout_width="40dp"
                 android:layout_height="40dp"
-                android:src="@drawable/ic_account_circle"
+                tools:src="@drawable/ic_account_circle"
                 app:shapeAppearanceOverlay="@style/circular" />
 
             <LinearLayout
@@ -42,6 +44,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:paddingStart="12dp"
+                android:orientation="vertical"
                 android:paddingEnd="0dp">
 
                 <TextView
@@ -51,6 +54,12 @@
                     android:textColor="@color/black"
                     android:textSize="16sp"
                     tools:text="@tools:sample/full_names" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@{member.dateOfBirth}"
+                    tools:text="@tools:sample/date/ddmmyy" />
             </LinearLayout>
 
             <ImageView

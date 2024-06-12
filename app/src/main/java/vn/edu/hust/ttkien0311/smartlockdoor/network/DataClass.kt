@@ -1,14 +1,13 @@
 package vn.edu.hust.ttkien0311.smartlockdoor.network
 
-import androidx.lifecycle.LiveData
 import com.squareup.moshi.Json
 import java.time.LocalDate
-import java.util.Date
 
 data class AccountDto(
     @Json(name = "Email") val email: String,
     @Json(name = "Password") val password: String,
     @Json(name = "Username") val username: String,
+    @Json(name = "PhoneToken") val phoneToken: String
 )
 
 data class Account(
@@ -25,6 +24,7 @@ data class Account(
     @Json(name = "RefreshTokenExpires") val refreshTokenExpires: String,
     @Json(name = "PasswordToken") val passwordToken: String,
     @Json(name = "PasswordTokenExpires") val passwordTokenExpires: String,
+    @Json(name = "PhoneToken") val phoneToken: String,
     @Json(name = "ModifiedDate") val modifiedDate: String,
 )
 
@@ -53,6 +53,7 @@ data class PasswordChange(
 
 data class MemberDto(
     @Json(name = "MemberName") val memberName: String,
+    @Json(name = "DeviceId") val deviceId: String,
     @Json(name = "MemberPhoto") val memberPhoto: String,
     @Json(name = "DateOfBirth") val dateOfBirth: String?,
     @Json(name = "PhoneNumber") val phoneNumber: String?
@@ -60,6 +61,7 @@ data class MemberDto(
 
 data class Member(
     @Json(name = "MemberId") val memberId: String,
+    @Json(name = "DeviceId") val deviceId: String,
     @Json(name = "MemberName") val memberName: String,
     @Json(name = "MemberPhoto") val memberPhoto: String,
     @Json(name = "DateOfBirth") var dateOfBirth: String?,
@@ -72,16 +74,36 @@ data class Member(
 
 data class Image(
     @Json(name = "ImageId") val imageId: String,
+    @Json(name = "MemberId") val memberId: String,
+    @Json(name = "DeviceId") val deviceId: String,
     @Json(name = "ImageLink") val imageLink: String,
     @Json(name = "CreatedDate") var createdDate: String,
     @Json(name = "CreatedBy") val createdBy: String,
-    @Json(name = "MemberId") val memberId: String,
     @Json(name = "MemberName") val memberName: String,
     @Json(name = "MemberPhoto") val memberPhoto: String
 
 )
 
-data class Date(
+data class MonthLabel(
     var date: LocalDate,
+    var images: List<Image> = emptyList(),
     var isExpanded: Boolean = false
+)
+
+data class Notification(
+    @Json(name = "NotifId") val notifId: String,
+    @Json(name = "AccountId") val accountId: String,
+    @Json(name = "DeviceId") val deviceId: String,
+    @Json(name = "NotifTitle") val notifTitle: String,
+    @Json(name = "NotifBody") val notifBody: String,
+    @Json(name = "NotifState") var state: Int,
+    @Json(name = "CreatedDate") var createdDate: String
+)
+
+data class Device(
+    @Json(name = "DeviceId") val deviceId: String,
+    @Json(name = "AccountId") val accountId: String,
+    @Json(name = "DeviceName") val deviceName: String,
+    @Json(name = "DeviceState") val deviceState: String,
+    @Json(name = "CreatedDate") val createdDate: String,
 )

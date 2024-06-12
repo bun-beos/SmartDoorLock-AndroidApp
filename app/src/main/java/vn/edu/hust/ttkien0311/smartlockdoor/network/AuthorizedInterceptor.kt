@@ -3,13 +3,10 @@ package vn.edu.hust.ttkien0311.smartlockdoor.network
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.launch
 import okhttp3.Interceptor
 import okhttp3.Request
 import okhttp3.Response
-import vn.edu.hust.ttkien0311.smartlockdoor.WelcomeActivity
+import vn.edu.hust.ttkien0311.smartlockdoor.ui.welcome.WelcomeActivity
 import vn.edu.hust.ttkien0311.smartlockdoor.helper.EncryptedSharedPreferencesManager
 import java.util.Date
 
@@ -50,6 +47,8 @@ class AuthorizedInterceptor(private val context: Context) : Interceptor {
         sharedPreferencesManager.saveAccessToken("")
         sharedPreferencesManager.saveRefreshToken("")
         sharedPreferencesManager.saveRefreshTokenExpires("")
+        sharedPreferencesManager.saveAccountId("")
+        sharedPreferencesManager.saveSelectedDevice("")
         sharedPreferencesManager.saveLoginStatus(false)
 
         val intent = Intent(context, WelcomeActivity::class.java)

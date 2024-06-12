@@ -40,24 +40,28 @@ object ExceptionHelper {
 
             is HttpException -> {
                 if (ex.code() != 401) {
-                    val msg =
-                        decodeUnicodeEscape(ex.response()?.errorBody()?.string()!!)
-                    val adapter: JsonAdapter<ErrorResponse> =
-                        Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
-                            .adapter(ErrorResponse::class.java)
-                    val jsonMsg = adapter.fromJson(msg)
+                    try {
+                        val msg =
+                            decodeUnicodeEscape(ex.response()?.errorBody()?.string()!!)
+                        val adapter: JsonAdapter<ErrorResponse> =
+                            Moshi.Builder().add(KotlinJsonAdapterFactory()).build()
+                                .adapter(ErrorResponse::class.java)
+                        val jsonMsg = adapter.fromJson(msg)
 
-                    if (ex.code() >= 500) {
+                        if (ex.code() >= 500) {
 
-                        Toast.makeText(
-                            context,
-                            "${jsonMsg?.userMessage}",
-                            Toast.LENGTH_LONG
-                        ).show()
-                    } else {
-                        showAlertDialog(context, null, jsonMsg!!.userMessage)
+                            Toast.makeText(
+                                context,
+                                "${jsonMsg?.userMessage}",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        } else {
+                            showAlertDialog(context, null, jsonMsg!!.userMessage)
+                        }
+                        Log.d("SLD", "Dev message: ${jsonMsg?.devMessage}")
+                    } catch (ex: Exception) {
+
                     }
-                    Log.d("SLD", "Dev message: ${jsonMsg?.devMessage}")
                 }
             }
 

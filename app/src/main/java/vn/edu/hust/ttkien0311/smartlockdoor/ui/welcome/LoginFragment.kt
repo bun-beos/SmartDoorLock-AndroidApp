@@ -2,6 +2,7 @@ package vn.edu.hust.ttkien0311.smartlockdoor.ui.welcome
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -10,9 +11,11 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import vn.edu.hust.ttkien0311.smartlockdoor.MainActivity
+import vn.edu.hust.ttkien0311.smartlockdoor.ui.main.MainActivity
 import vn.edu.hust.ttkien0311.smartlockdoor.R
 import vn.edu.hust.ttkien0311.smartlockdoor.databinding.FragmentLoginBinding
 import vn.edu.hust.ttkien0311.smartlockdoor.helper.AlertDialogHelper.hideLoading
@@ -26,9 +29,19 @@ import vn.edu.hust.ttkien0311.smartlockdoor.network.ServerApi
 
 class LoginFragment : Fragment() {
     private lateinit var binding: FragmentLoginBinding
+    private var phoneToken: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+            if (!task.isSuccessful) {
+                Log.w("SLD", "Fetching FCM registration token failed", task.exception)
+                return@OnCompleteListener
+            }
+            // Get new FCM registration token
+            phoneToken = task.result
+            Log.d("SLD", "FCM registration token: $phoneToken")
+        })
     }
 
     override fun onCreateView(
@@ -73,13 +86,14 @@ class LoginFragment : Fragment() {
 
             if (emailChecked && passwordChecked) {
                 lifecycleScope.launch {
-                    val accountDto = AccountDto(
-                        emailInput.text.toString().trim(),
-                        passwordInput.text.toString().trim(),
-                        ""
-                    )
-
                     try {
+                        val accountDto = AccountDto(
+                            emailInput.text.toString().trim(),
+                            passwordInput.text.toString().trim(),
+                            "",
+                            phoneToken
+                        )
+
                         showLoading(requireActivity())
                         delay(600)
 
@@ -91,7 +105,10 @@ class LoginFragment : Fragment() {
                         sharedPreferencesManager.saveRefreshTokenExpires(response.refreshTokenExpires)
                         sharedPreferencesManager.saveLoginStatus(true)
 
+                        val account = ServerApi(requireActivity()).retrofitService.getAccountInfo()
                         hideLoading()
+
+                        sharedPreferencesManager.saveAccountId(account.accountId)
 
                         val intent = Intent(activity, MainActivity::class.java)
                         startActivity(intent)
