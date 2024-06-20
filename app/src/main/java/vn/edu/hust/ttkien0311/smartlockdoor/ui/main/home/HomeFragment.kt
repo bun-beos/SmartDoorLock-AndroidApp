@@ -1,16 +1,18 @@
 package vn.edu.hust.ttkien0311.smartlockdoor.ui.main.home
 
+import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.launch
 import vn.edu.hust.ttkien0311.smartlockdoor.R
 import vn.edu.hust.ttkien0311.smartlockdoor.databinding.FragmentHomeBinding
@@ -18,16 +20,19 @@ import vn.edu.hust.ttkien0311.smartlockdoor.helper.AlertDialogHelper.hideLoading
 import vn.edu.hust.ttkien0311.smartlockdoor.helper.AlertDialogHelper.showLoading
 import vn.edu.hust.ttkien0311.smartlockdoor.helper.EncryptedSharedPreferencesManager
 import vn.edu.hust.ttkien0311.smartlockdoor.helper.ExceptionHelper.handleException
+import vn.edu.hust.ttkien0311.smartlockdoor.network.Device
 import vn.edu.hust.ttkien0311.smartlockdoor.network.MonthLabel
 import vn.edu.hust.ttkien0311.smartlockdoor.network.ServerApi
 import java.time.LocalDate
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
-import java.util.UUID
+
+enum class HistoryMode { LIST, GRID }
 
 class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
     private val viewModel: HomeViewModel by activityViewModels()
+    private var cardMenuState: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,18 +48,47 @@ class HomeFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home, container, false)
         binding.lifecycleOwner = this
+        binding.viewModel = viewModel
 
         val sharedPreferencesManager = EncryptedSharedPreferencesManager(requireContext())
         val myAccountId = sharedPreferencesManager.getAccountId()
         val currentDeviceId = sharedPreferencesManager.getSelectedDevice()
 
-        if (viewModel.devices.value == null) {
-            getMyListDevice(myAccountId, currentDeviceId)
+        if (viewModel.historyMode.value == null) {
+            viewModel.setMode(HistoryMode.LIST.toString())
+        }
+
+//        binding.listDevice.adapter =
+//            MyDeviceListAdapter(
+//                requireActivity()
+//            ) { device ->
+//                val newList = mutableListOf<Device>()
+//                for (item in viewModel.devices.value!!) {
+//                    item.selected = (item.deviceId == device.deviceId)
+//                    if (item.selected) {
+//                        newList.add(0, item)
+//                    } else {
+//                        newList.add(item)
+//                    }
+//                }
+//                viewModel.setMyListDevice(newList)
+////                binding.listDevice.scrollToPosition(0)
+//
+//                getListLabel(device.deviceId)
+//            }
+
+        if (viewModel.devices.value.isNullOrEmpty()) {
+            getMyListDevice(requireContext(), myAccountId, currentDeviceId)
         } else {
             binding.listDevice.adapter =
-                MyDeviceListAdapter(requireActivity(), viewModel.devices.value!!)
+                MyDeviceListAdapter(requireActivity(), viewModel.devices.value!!) { id ->
+                    getListLabel(id)
+                    binding.listDevice.scrollToPosition(0)
+                }
+
             binding.listDevice.visibility = View.VISIBLE
             binding.emptyDevice.visibility = View.GONE
+
             if (currentDeviceId.isNotEmpty()) {
                 if (viewModel.dates.value == null) {
                     getListLabel(currentDeviceId)
@@ -63,6 +97,7 @@ class HomeFragment : Fragment() {
                         requireActivity(),
                         currentDeviceId,
                         viewModel.dates.value!!,
+                        viewModel.historyMode.value!!,
                         HistoryRowListener { image ->
                             viewModel.onHistoryRowClicked(image)
                             findNavController().navigate(R.id.action_homeFragment_to_historyDetailFragment)
@@ -81,28 +116,121 @@ class HomeFragment : Fragment() {
         )
 
         binding.swipeRefreshLayout.setOnRefreshListener {
-            getMyListDevice(myAccountId, currentDeviceId)
+            getMyListDevice(
+                requireContext(),
+                myAccountId,
+                sharedPreferencesManager.getSelectedDevice()
+            )
             hideLoading()
         }
 
+        binding.addIcon.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_deviceFragment)
+        }
+
+        binding.dehazeIcon.setOnClickListener {
+            cardMenuState = !cardMenuState
+            if (cardMenuState) {
+                binding.cardViewMenu.visibility = View.VISIBLE
+                if (viewModel.historyMode.value == HistoryMode.GRID.toString()) {
+                    binding.listView.visibility = View.VISIBLE
+                    binding.gridView.visibility = View.GONE
+                } else {
+                    binding.listView.visibility = View.GONE
+                    binding.gridView.visibility = View.VISIBLE
+                }
+            } else {
+                binding.cardViewMenu.visibility = View.GONE
+            }
+        }
+
+        binding.listView.setOnClickListener {
+            cardMenuState = false
+            viewModel.setMode(HistoryMode.LIST.toString())
+            binding.listView.visibility = View.GONE
+            binding.gridView.visibility = View.VISIBLE
+            binding.cardViewMenu.visibility = View.GONE
+
+            if (!viewModel.dates.value.isNullOrEmpty()) {
+                binding.listMonth.adapter = MonthListAdapter(
+                    requireActivity(),
+                    sharedPreferencesManager.getSelectedDevice(),
+                    viewModel.dates.value!!,
+                    viewModel.historyMode.value!!,
+                    HistoryRowListener { image ->
+                        viewModel.onHistoryRowClicked(image)
+                        findNavController().navigate(R.id.action_homeFragment_to_historyDetailFragment)
+                    })
+            }
+        }
+
+        binding.gridView.setOnClickListener {
+            cardMenuState = false
+            viewModel.setMode(HistoryMode.GRID.toString())
+            binding.listView.visibility = View.VISIBLE
+            binding.gridView.visibility = View.GONE
+            binding.cardViewMenu.visibility = View.GONE
+
+            if (!viewModel.dates.value.isNullOrEmpty()) {
+                binding.listMonth.adapter = MonthListAdapter(
+                    requireActivity(),
+                    sharedPreferencesManager.getSelectedDevice(),
+                    viewModel.dates.value!!,
+                    viewModel.historyMode.value!!,
+                    HistoryRowListener { image ->
+                        viewModel.onHistoryRowClicked(image)
+                        findNavController().navigate(R.id.action_homeFragment_to_historyDetailFragment)
+                    })
+            }
+        }
+
+        binding.search.setOnClickListener {
+            Toast.makeText(requireContext(), "Coming soon", Toast.LENGTH_SHORT).show()
+        }
 
         return binding.root
     }
 
-    private fun getMyListDevice(accountId: String, deviceId: String) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.listMonth.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                if (newState == RecyclerView.SCROLL_STATE_IDLE) {
+                    binding.swipeRefreshLayout.isEnabled = !recyclerView.canScrollVertically(-1)
+                }
+            }
+        })
+    }
+
+    private fun getMyListDevice(context: Context, accountId: String, deviceId: String) {
         lifecycleScope.launch {
             try {
-                showLoading(requireActivity())
-                val listDevice = ServerApi(requireActivity()).retrofitService.getDevice(accountId)
+                showLoading(context)
+                val listDevice = ServerApi(context).retrofitService.getDeviceByAccount(accountId)
                 if (deviceId.isNotEmpty()) {
                     getListLabel(deviceId)
                 }
                 hideLoading()
-                if (listDevice.isNotEmpty()) {
-                    viewModel.setMyListDevice(listDevice)
-                    binding.listDevice.adapter =
-                        MyDeviceListAdapter(requireActivity(), viewModel.devices.value!!)
 
+                val newList = mutableListOf<Device>()
+                for (item in listDevice) {
+                    if (item.deviceId == deviceId) {
+                        item.selected = true
+                        newList.add(0, item)
+                    } else {
+                        item.selected = false
+                        newList.add(item)
+                    }
+                }
+                viewModel.setMyListDevice(newList)
+                binding.listDevice.adapter =
+                    MyDeviceListAdapter(context, viewModel.devices.value!!) { id ->
+                        getListLabel(id)
+                        binding.listDevice.scrollToPosition(0)
+                    }
+
+                if (listDevice.isNotEmpty()) {
                     binding.listDevice.visibility = View.VISIBLE
                     binding.emptyDevice.visibility = View.GONE
                 } else {
@@ -111,10 +239,7 @@ class HomeFragment : Fragment() {
                 }
             } catch (ex: Exception) {
                 hideLoading()
-                handleException(ex, requireActivity())
-
-                binding.listDevice.visibility = View.GONE
-                binding.emptyDevice.visibility = View.VISIBLE
+                handleException(ex, context)
             }
             binding.swipeRefreshLayout.isRefreshing = false
         }
@@ -133,6 +258,7 @@ class HomeFragment : Fragment() {
                     requireActivity(),
                     deviceId,
                     viewModel.dates.value!!,
+                    viewModel.historyMode.value!!,
                     HistoryRowListener { image ->
                         viewModel.onHistoryRowClicked(image)
                         findNavController().navigate(R.id.action_homeFragment_to_historyDetailFragment)

@@ -1,19 +1,16 @@
 package vn.edu.hust.ttkien0311.smartlockdoor.ui.main.home
 
 import android.content.Context
-import android.os.Build
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.RequiresApi
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import vn.edu.hust.ttkien0311.smartlockdoor.databinding.MonthLabelItemBinding
-import vn.edu.hust.ttkien0311.smartlockdoor.helper.AlertDialogHelper.hideLoading
-import vn.edu.hust.ttkien0311.smartlockdoor.helper.AlertDialogHelper.showLoading
 import vn.edu.hust.ttkien0311.smartlockdoor.helper.ExceptionHelper.handleException
 import vn.edu.hust.ttkien0311.smartlockdoor.helper.Helper.formatDateTime
 import vn.edu.hust.ttkien0311.smartlockdoor.network.MonthLabel
@@ -21,8 +18,9 @@ import vn.edu.hust.ttkien0311.smartlockdoor.network.ServerApi
 
 class MonthListAdapter(
     private val context: Context,
-    private val deviceId : String,
+    private val deviceId: String,
     private val data: List<MonthLabel>,
+    private val mode: String,
     private val clickListener: HistoryRowListener
 ) :
     RecyclerView.Adapter<MonthListAdapter.ItemViewHolder>() {
@@ -31,12 +29,24 @@ class MonthListAdapter(
         private val binding: MonthLabelItemBinding
     ) :
         RecyclerView.ViewHolder(binding.root) {
-        fun bind(context: Context, deviceId: String, monthLabelValue: MonthLabel, clickListener: HistoryRowListener) {
+        fun bind(
+            context: Context,
+            deviceId: String,
+            monthLabelValue: MonthLabel,
+            mode: String,
+            clickListener: HistoryRowListener
+        ) {
             binding.date = monthLabelValue.date
 
             if (monthLabelValue.isExpanded && monthLabelValue.images.isNotEmpty()) {
+                if (mode == HistoryMode.LIST.toString()) {
+                    binding.historyList.layoutManager = LinearLayoutManager(context)
+                } else {
+                    binding.historyList.layoutManager = GridLayoutManager(context, 2)
+                }
+
                 binding.historyList.adapter =
-                    HistoryListAdapter(monthLabelValue.images, clickListener)
+                    HistoryListAdapter(monthLabelValue.images, mode, clickListener)
 
                 binding.arrowDown.rotation = 180f
                 binding.historyList.visibility = View.VISIBLE
@@ -66,8 +76,15 @@ class MonthListAdapter(
                                 }
                                 monthLabelValue.images = res
 
+                                if (mode == HistoryMode.LIST.toString()) {
+                                    binding.historyList.layoutManager = LinearLayoutManager(context)
+                                } else {
+                                    binding.historyList.layoutManager =
+                                        GridLayoutManager(context, 2)
+                                }
+
                                 binding.historyList.adapter =
-                                    HistoryListAdapter(monthLabelValue.images, clickListener)
+                                    HistoryListAdapter(monthLabelValue.images, mode, clickListener)
                                 binding.arrowDown.rotation = 180f
 
                                 binding.historyList.visibility = View.VISIBLE
@@ -108,7 +125,7 @@ class MonthListAdapter(
 
     override fun onBindViewHolder(holder: ItemViewHolder, position: Int) {
         val item = data[position]
-        holder.bind(context, deviceId, item, clickListener)
+        holder.bind(context, deviceId, item, mode, clickListener)
     }
 }
 

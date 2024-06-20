@@ -11,7 +11,7 @@ object AlertDialogHelper {
         val builder = AlertDialog.Builder(context)
             .setTitle(title)
             .setMessage(message)
-            .setPositiveButton("Ok") {
+            .setPositiveButton(context.getString(R.string.ok)) {
                     dialog, _ -> dialog.dismiss()
             }
 

@@ -1,13 +1,8 @@
 package vn.edu.hust.ttkien0311.smartlockdoor.helper
 
-import android.content.Context
 import android.graphics.Bitmap
-import android.graphics.BitmapFactory
-import android.net.Uri
 import android.os.Build
-import android.provider.MediaStore
 import android.util.Base64
-import android.util.Patterns
 import androidx.annotation.RequiresApi
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout

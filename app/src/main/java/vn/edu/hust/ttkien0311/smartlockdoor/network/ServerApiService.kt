@@ -147,11 +147,11 @@ interface ServerApiService {
     // Device******************************************************
     // Lấy tất cả thông tin thiết bị
     @GET(device_url)
-    suspend fun getAllDevice(): List<Device>
+    suspend fun getAllDevice(@Query("accountId") accountId: String): List<Device>
 
     // Lấy thông tin thiết bị theo accountId
     @GET("${device_url}/{accountId}")
-    suspend fun getDevice(@Path("accountId") accountId: String): List<Device>
+    suspend fun getDeviceByAccount(@Path("accountId") accountId: String): List<Device>
 
     // Cập nhập thông tin thiết bị
     @PUT(device_url)

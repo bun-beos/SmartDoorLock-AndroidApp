@@ -17,7 +17,6 @@ import vn.edu.hust.ttkien0311.smartlockdoor.databinding.FragmentNotificationDeta
 import vn.edu.hust.ttkien0311.smartlockdoor.helper.AlertDialogHelper.hideLoading
 import vn.edu.hust.ttkien0311.smartlockdoor.helper.AlertDialogHelper.showLoading
 import vn.edu.hust.ttkien0311.smartlockdoor.helper.ExceptionHelper.handleException
-import vn.edu.hust.ttkien0311.smartlockdoor.helper.Helper
 import vn.edu.hust.ttkien0311.smartlockdoor.helper.Helper.formatDateTime
 import vn.edu.hust.ttkien0311.smartlockdoor.network.ServerApi
 import vn.edu.hust.ttkien0311.smartlockdoor.ui.welcome.WelcomeActivity

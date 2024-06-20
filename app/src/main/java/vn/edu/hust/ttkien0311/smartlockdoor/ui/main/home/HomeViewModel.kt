@@ -9,8 +9,8 @@ import vn.edu.hust.ttkien0311.smartlockdoor.network.MonthLabel
 import vn.edu.hust.ttkien0311.smartlockdoor.network.Image
 
 class HomeViewModel : ViewModel() {
-    private val _devices = MutableLiveData<List<Device>>()
-    val devices: LiveData<List<Device>> = _devices
+    private val _devices = MutableLiveData<MutableList<Device>>()
+    val devices: LiveData<MutableList<Device>> = _devices
 
     private val _dates = MutableLiveData<List<MonthLabel>>()
     val dates: LiveData<List<MonthLabel>> = _dates
@@ -18,7 +18,10 @@ class HomeViewModel : ViewModel() {
     private val _image = MutableLiveData<Image>()
     val image: LiveData<Image> = _image
 
-    fun setMyListDevice(listDevice: List<Device>) {
+    private val _historyMode = MutableLiveData<String>()
+    val historyMode: LiveData<String> = _historyMode
+
+    fun setMyListDevice(listDevice: MutableList<Device>) {
         _devices.value = listDevice
     }
 
@@ -28,5 +31,9 @@ class HomeViewModel : ViewModel() {
 
     fun onHistoryRowClicked(image: Image) {
         _image.value = image
+    }
+
+    fun setMode(mode: String) {
+        _historyMode.value = mode
     }
 }

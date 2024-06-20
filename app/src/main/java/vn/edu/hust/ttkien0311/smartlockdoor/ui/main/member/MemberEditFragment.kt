@@ -1,10 +1,8 @@
 package vn.edu.hust.ttkien0311.smartlockdoor.ui.main.member
 
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
@@ -17,7 +15,6 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.core.graphics.drawable.toBitmap
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
@@ -36,7 +33,6 @@ import vn.edu.hust.ttkien0311.smartlockdoor.helper.Helper
 import vn.edu.hust.ttkien0311.smartlockdoor.helper.Helper.formatDateTime
 import vn.edu.hust.ttkien0311.smartlockdoor.helper.Helper.validateDateOfBirth
 import vn.edu.hust.ttkien0311.smartlockdoor.helper.Helper.validatePhoneNumber
-import vn.edu.hust.ttkien0311.smartlockdoor.network.Member
 import vn.edu.hust.ttkien0311.smartlockdoor.network.MemberDto
 import vn.edu.hust.ttkien0311.smartlockdoor.network.ServerApi
 import java.time.LocalDate

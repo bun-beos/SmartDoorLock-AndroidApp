@@ -5,7 +5,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.activity.addCallback
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.findNavController
 import vn.edu.hust.ttkien0311.smartlockdoor.R

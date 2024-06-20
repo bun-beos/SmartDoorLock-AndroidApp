@@ -16,6 +16,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.github.dhaval2404.imagepicker.ImagePicker
 import kotlinx.coroutines.launch
 import vn.edu.hust.ttkien0311.smartlockdoor.R
@@ -95,6 +96,10 @@ class ProfileFragment : Fragment() {
 
         binding.checkDoor.setOnClickListener {
             view.findNavController().navigate(R.id.action_profileFragment_to_doorFragment)
+        }
+
+        binding.allDevices.setOnClickListener {
+            findNavController().navigate(R.id.action_profileFragment_to_deviceFragment)
         }
 
         binding.logOut.setOnClickListener {

@@ -6,10 +6,10 @@ import androidx.lifecycle.ViewModel
 import vn.edu.hust.ttkien0311.smartlockdoor.network.Notification
 
 class NotificationViewModel: ViewModel() {
-    private val _notifications = MutableLiveData<List<Notification>>()
-    val notification: LiveData<List<Notification>> = _notifications
+    private val _notifications = MutableLiveData<MutableList<Notification>>()
+    val notification: LiveData<MutableList<Notification>> = _notifications
 
-    fun setListNotification(data: List<Notification>) {
+    fun setListNotification(data: MutableList<Notification>) {
         _notifications.value = data
     }
 }

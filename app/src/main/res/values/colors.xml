@@ -16,4 +16,5 @@
     <color name="blur">#DDDDDD</color>
     <color name="bg_color">#F5F5F5</color>
     <color name="transparent_color">#00FFFFFF</color>
+    <color name="deleteColor">#FF594D</color>
 </resources>

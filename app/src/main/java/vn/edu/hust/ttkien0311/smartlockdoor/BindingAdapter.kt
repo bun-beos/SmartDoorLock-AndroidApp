@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import coil.load
 import vn.edu.hust.ttkien0311.smartlockdoor.network.Device
 import vn.edu.hust.ttkien0311.smartlockdoor.ui.main.home.MyDeviceListAdapter
+import vn.edu.hust.ttkien0311.smartlockdoor.ui.main.profile.DeviceListAdapter
 
 @BindingAdapter("imageUrl")
 fun bindImage(imgView: ImageView, imgUrl: String?) {
@@ -25,3 +26,9 @@ fun bindImage(imgView: ImageView, imgUrl: String?) {
 //    val adapter = recyclerView.adapter as MyDeviceListAdapter
 //    adapter.submitList(data)
 //}
+
+@BindingAdapter("listDevice")
+fun bindListDevice(recyclerView: RecyclerView, data: List<Device>?) {
+    val adapter = recyclerView.adapter as DeviceListAdapter
+    adapter.submitList(data)
+}

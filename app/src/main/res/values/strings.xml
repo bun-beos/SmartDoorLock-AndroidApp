@@ -46,11 +46,12 @@
     <string name="empty_content">Trống</string>
     <string name="notification">Thông báo</string>
     <string name="check_door">Kiểm tra cửa</string>
-    <string name="all_devices">Tất cả thiết bị</string>
+    <string name="current_device">Thiết bị hiện có</string>
     <string name="account">Tài khoản</string>
     <string name="my_device">Thiết bị của tôi</string>
-    <string name="no_device">Danh sách trống</string>
+    <string name="empty_list">Danh sách trống</string>
     <string name="search">Tìm kiếm</string>
     <string name="list">Danh sách</string>
     <string name="grid">Lưới</string>
+    <string name="ok">Ok</string>
 </resources>

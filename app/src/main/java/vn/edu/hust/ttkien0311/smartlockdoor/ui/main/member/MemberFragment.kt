@@ -24,7 +24,6 @@ import vn.edu.hust.ttkien0311.smartlockdoor.network.ServerApi
 class MemberFragment : Fragment() {
     private lateinit var binding: FragmentMemberBinding
     private val viewModel: MemberViewModel by activityViewModels()
-    private var currentDeviceId = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,11 +40,11 @@ class MemberFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_member, container, false)
         binding.lifecycleOwner = this
         val sharedPreferencesManager = EncryptedSharedPreferencesManager(requireActivity())
-        currentDeviceId = sharedPreferencesManager.getSelectedDevice()
+        val currentDeviceId = sharedPreferencesManager.getSelectedDevice()
 
         if (currentDeviceId.isNotEmpty()) {
             if (viewModel.members.value == null) {
-                getListMember()
+                getListMember(currentDeviceId)
             } else {
                 binding.listMember.adapter =
                     MemberAdapter(viewModel.members.value!!, MemberItemListener { member ->
@@ -58,22 +57,6 @@ class MemberFragment : Fragment() {
             }
         }
 
-        binding.swipeRefreshLayout.setColorSchemeColors(
-            resources.getColor(
-                R.color.link_color,
-                null
-            )
-        )
-        binding.swipeRefreshLayout.setOnRefreshListener {
-            getListMember()
-            hideLoading()
-        }
-
-        return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
         binding.magnifyIcon.setOnClickListener {
             Toast.makeText(requireActivity(), "Coming soon", Toast.LENGTH_SHORT).show()
         }
@@ -87,14 +70,32 @@ class MemberFragment : Fragment() {
                 )
             findNavController().navigate(action)
         }
+
+        binding.swipeRefreshLayout.setColorSchemeColors(
+            resources.getColor(
+                R.color.link_color,
+                null
+            )
+        )
+        binding.swipeRefreshLayout.setOnRefreshListener {
+            getListMember(currentDeviceId)
+            hideLoading()
+        }
+
+        return binding.root
     }
 
-    private fun getListMember() {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+    }
+
+    private fun getListMember(deviceId:String) {
         lifecycleScope.launch {
             try {
                 showLoading(requireActivity())
                 val res = ServerApi(requireActivity()).retrofitService.getAllByDeviceMember(
-                    currentDeviceId
+                    deviceId
                 )
                 hideLoading()
 
@@ -109,7 +110,8 @@ class MemberFragment : Fragment() {
                     binding.listMember.adapter =
                         MemberAdapter(viewModel.members.value!!, MemberItemListener { member ->
                             viewModel.onMemberRowClicked(member)
-                            findNavController().navigate(R.id.action_memberFragment_to_memberDetailFragment)
+                            val action = MemberFragmentDirections.actionMemberFragmentToMemberDetailFragment(deviceId)
+                            findNavController().navigate(action)
                         })
                     binding.listMember.visibility = View.VISIBLE
                     binding.emptyContent.visibility = View.GONE

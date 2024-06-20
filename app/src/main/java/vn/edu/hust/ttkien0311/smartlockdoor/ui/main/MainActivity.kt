@@ -2,14 +2,9 @@ package vn.edu.hust.ttkien0311.smartlockdoor.ui.main
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import androidx.navigation.NavDirections
-import androidx.navigation.Navigation
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.findNavController
-import com.google.android.gms.tasks.OnCompleteListener
-import com.google.firebase.messaging.FirebaseMessaging
 import vn.edu.hust.ttkien0311.smartlockdoor.R
 import vn.edu.hust.ttkien0311.smartlockdoor.databinding.ActivityMainBinding
 

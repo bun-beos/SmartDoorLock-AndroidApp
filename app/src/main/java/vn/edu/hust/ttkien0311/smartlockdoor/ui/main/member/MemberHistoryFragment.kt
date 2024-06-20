@@ -1,17 +1,17 @@
 package vn.edu.hust.ttkien0311.smartlockdoor.ui.main.member
 
-import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.annotation.RequiresApi
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.coroutines.launch
 import vn.edu.hust.ttkien0311.smartlockdoor.R
 import vn.edu.hust.ttkien0311.smartlockdoor.databinding.FragmentMemberHistoryBinding
@@ -21,6 +21,7 @@ import vn.edu.hust.ttkien0311.smartlockdoor.helper.ExceptionHelper
 import vn.edu.hust.ttkien0311.smartlockdoor.helper.Helper.formatDateTime
 import vn.edu.hust.ttkien0311.smartlockdoor.network.ServerApi
 import vn.edu.hust.ttkien0311.smartlockdoor.ui.main.home.HistoryListAdapter
+import vn.edu.hust.ttkien0311.smartlockdoor.ui.main.home.HistoryMode
 import vn.edu.hust.ttkien0311.smartlockdoor.ui.main.home.HistoryRowListener
 import vn.edu.hust.ttkien0311.smartlockdoor.ui.main.home.HomeViewModel
 
@@ -40,15 +41,14 @@ class MemberHistoryFragment : Fragment() {
         // Inflate the layout for this fragment
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_member_history, container, false)
-        binding.toolbar.title.text = "Lịch sử"
-        val memberId = args.memberId
+        binding.toolbar.title.text = resources.getString(R.string.history)
 
         lifecycleScope.launch {
             showLoading(requireActivity())
             try {
                 val res = ServerApi(requireActivity()).retrofitService.filterImage(
                     args.deviceId,
-                    memberId,
+                    args.memberId,
                     null,
                     null
                 )
@@ -59,7 +59,7 @@ class MemberHistoryFragment : Fragment() {
                         image.createdDate = formatDateTime(image.createdDate, "HH:mm - dd/MM/yyyy")
                     }
                     binding.listMemberHistory.adapter =
-                        HistoryListAdapter(res, HistoryRowListener { image ->
+                        HistoryListAdapter(res, HistoryMode.LIST.toString(), HistoryRowListener { image ->
                             viewModel.onHistoryRowClicked(image)
                             findNavController().navigate(R.id.action_memberHistoryFragment_to_historyDetailFragment)
                         })

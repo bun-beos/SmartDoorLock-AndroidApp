@@ -30,7 +30,7 @@ class AuthorizedInterceptor(private val context: Context) : Interceptor {
                 val currentTime = Date()
 
                 return if (refreshToken.isNotEmpty() && refreshTokenExpires?.after(currentTime) == true) {
-                    refreshToken(chain, request, sharedPreferencesManager)
+                    onRefreshToken(chain, request, sharedPreferencesManager)
                 } else {
                     response
                 }
@@ -56,7 +56,7 @@ class AuthorizedInterceptor(private val context: Context) : Interceptor {
 //        Activity().finish()
     }
 
-    private fun refreshToken(
+    private fun onRefreshToken(
         chain: Interceptor.Chain,
         request: Request,
         sharedPreferencesManager: EncryptedSharedPreferencesManager

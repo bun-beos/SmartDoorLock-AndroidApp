@@ -25,6 +25,9 @@
         <action
             android:id="@+id/action_to_notificationFragment"
             app:destination="@id/notificationFragment" />
+        <action
+            android:id="@+id/action_homeFragment_to_deviceFragment"
+            app:destination="@id/deviceFragment" />
     </fragment>
 
     <fragment
@@ -53,6 +56,9 @@
         <action
             android:id="@+id/action_profileFragment_to_doorFragment"
             app:destination="@id/doorFragment" />
+        <action
+            android:id="@+id/action_profileFragment_to_deviceFragment"
+            app:destination="@id/deviceFragment" />
     </fragment>
 
     <fragment
@@ -187,4 +193,9 @@
         android:name="vn.edu.hust.ttkien0311.smartlockdoor.ui.main.DoorFragment"
         android:label="fragment_door"
         tools:layout="@layout/fragment_door" />
+    <fragment
+        android:id="@+id/deviceFragment"
+        android:name="vn.edu.hust.ttkien0311.smartlockdoor.ui.main.profile.DeviceFragment"
+        android:label="fragment_device"
+        tools:layout="@layout/fragment_device" />
 </navigation>

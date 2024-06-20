@@ -200,7 +200,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="@string/all_devices"
+                        android:text="@string/current_device"
                         android:textSize="16sp" />
 
                     <ImageView
@@ -219,8 +219,10 @@
                 android:text="@string/log_out"
                 android:textColor="@color/error"
                 android:textSize="16sp"
-                android:textStyle="bold"
-                android:visibility="invisible"
+                android:textStyle="normal"
+                app:icon="@drawable/logout"
+                app:iconTint= "@color/error"
+                android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

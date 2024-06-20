@@ -5,181 +5,188 @@
 
     <data>
 
+        <variable
+            name="viewModel"
+            type="vn.edu.hust.ttkien0311.smartlockdoor.ui.main.home.HomeViewModel" />
     </data>
 
-    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-        android:id="@+id/swipeRefreshLayout"
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/bg_color">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <LinearLayout
+            android:id="@+id/linearLayout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:background="@color/bg_color"
-            tools:context=".ui.main.home.HomeFragment">
-
-            <LinearLayout
-                android:id="@+id/linearLayout"
-                android:layout_width="match_parent"
-                android:layout_height="55dp"
-                android:background="@color/my_light_primary"
-                android:orientation="horizontal"
-                app:layout_constraintTop_toTopOf="parent">
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginStart="16dp"
-                    android:layout_weight="1"
-                    android:text="@string/my_device"
-                    android:textColor="@color/white"
-                    android:textSize="22sp" />
-
-                <ImageView
-                    android:id="@+id/add_icon"
-                    android:layout_width="28dp"
-                    android:layout_height="28dp"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginEnd="16dp"
-                    android:src="@drawable/baseline_add_circle_outline_24" />
-            </LinearLayout>
-
-
-            <!--            <androidx.constraintlayout.widget.ConstraintLayout-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="wrap_content">-->
+            android:layout_height="55dp"
+            android:background="@color/my_light_primary"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toTopOf="parent">
 
             <TextView
-                android:id="@+id/emptyDevice"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:gravity="center"
-                android:text="@string/no_device"
-                android:textColor="@color/hint_text"
-                android:textSize="18sp"
-                android:textStyle="italic"
-                android:visibility="visible"
-                app:layout_constraintTop_toBottomOf="@id/linearLayout" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/list_device"
-                android:layout_width="match_parent"
-                android:layout_height="116dp"
-                android:orientation="horizontal"
-                android:paddingStart="0dp"
-                android:paddingTop="11dp"
-                android:paddingEnd="10dp"
-                android:scrollbars="none"
-                android:visibility="invisible"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintTop_toBottomOf="@id/linearLayout"
-                tools:listitem="@layout/my_device_item" />
-
-            <TextView
-                android:id="@+id/history_title"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:layout_marginStart="14dp"
-                android:layout_marginTop="116dp"
-                android:gravity="center_vertical"
-                android:text="@string/history"
-                android:textColor="@color/second_black"
-                android:textSize="18sp"
-                android:textStyle="bold|italic"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/linearLayout" />
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="16dp"
+                android:layout_weight="1"
+                android:text="@string/my_device"
+                android:textColor="@color/white"
+                android:textSize="22sp" />
 
             <ImageView
-                android:id="@+id/dehaze_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
+                android:id="@+id/add_icon"
+                android:layout_width="28dp"
+                android:layout_height="28dp"
                 android:layout_gravity="center_vertical"
                 android:layout_marginEnd="16dp"
-                android:src="@drawable/baseline_dehaze_24"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/history_title" />
+                android:src="@drawable/baseline_add_circle_outline_24" />
+        </LinearLayout>
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/cardViewMenu"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="-4dp"
-                android:translationZ="2dp"
-                android:visibility="gone"
-                app:cardCornerRadius="8dp"
-                app:layout_constraintEnd_toEndOf="@id/dehaze_icon"
-                app:layout_constraintTop_toBottomOf="@id/dehaze_icon">
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeRefreshLayout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/linearLayout">
 
-                <LinearLayout
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/emptyDevice"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center"
+                    android:text="@string/empty_list"
+                    android:textColor="@color/hint_text"
+                    android:textSize="18sp"
+                    android:textStyle="italic"
+                    android:visibility="visible"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/list_device"
+                    android:layout_width="match_parent"
+                    android:layout_height="116dp"
+                    android:orientation="horizontal"
+                    android:paddingStart="0dp"
+                    android:paddingTop="11dp"
+                    android:paddingEnd="10dp"
+                    android:scrollbars="none"
+                    android:visibility="invisible"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintTop_toTopOf="parent"
+                    tools:listitem="@layout/my_device_item" />
+
+                <TextView
+                    android:id="@+id/history_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_marginStart="14dp"
+                    android:layout_marginTop="116dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/history"
+                    android:textColor="@color/second_black"
+                    android:textSize="18sp"
+                    android:textStyle="bold|italic"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <ImageView
+                    android:id="@+id/dehaze_icon"
+                    android:layout_width="wrap_content"
+                    android:layout_height="40dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginEnd="16dp"
+                    android:src="@drawable/baseline_dehaze_24"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/history_title" />
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardViewMenu"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:padding="6dp">
+                    android:layout_marginTop="-4dp"
+                    android:visibility="gone"
+                    app:cardCornerRadius="8dp"
+                    app:layout_constraintEnd_toEndOf="@id/dehaze_icon"
+                    app:layout_constraintTop_toBottomOf="@id/dehaze_icon">
 
-                    <TextView
-                        android:layout_width="100dp"
+                    <LinearLayout
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:drawablePadding="4dp"
-                        android:gravity="center_vertical"
-                        android:text="@string/search"
-                        android:textColor="@color/second_black"
-                        app:drawableStartCompat="@drawable/magnify"
-                        app:drawableTint="@color/second_black" />
+                        android:orientation="vertical"
+                        android:padding="10dp">
 
-                    <TextView
-                        android:id="@+id/list_view"
-                        android:layout_width="100dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:drawablePadding="4dp"
-                        android:gravity="center_vertical"
-                        android:text="@string/list"
-                        android:textColor="@color/second_black"
-                        android:visibility="gone"
-                        app:drawableStartCompat="@drawable/format_list_bulleted"
-                        app:drawableTint="@color/second_black" />
+                        <TextView
+                            android:id="@+id/search"
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:drawablePadding="6dp"
+                            android:gravity="center_vertical"
+                            android:text="@string/search"
+                            android:textColor="@color/second_black"
+                            android:textSize="15sp"
+                            app:drawableStartCompat="@drawable/magnify"
+                            app:drawableTint="@color/second_black" />
 
-                    <TextView
-                        android:id="@+id/grid_view"
-                        android:layout_width="100dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="10dp"
-                        android:drawablePadding="4dp"
-                        android:gravity="center_vertical"
-                        android:text="@string/grid"
-                        android:textColor="@color/second_black"
-                        app:drawableStartCompat="@drawable/view_grid_outline"
-                        app:drawableTint="@color/second_black" />
-                </LinearLayout>
-            </androidx.cardview.widget.CardView>
+                        <TextView
+                            android:id="@+id/list_view"
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:drawablePadding="6dp"
+                            android:gravity="center_vertical"
+                            android:text="@string/list"
+                            android:textColor="@color/second_black"
+                            android:textSize="15sp"
+                            android:visibility="gone"
+                            app:drawableStartCompat="@drawable/format_list_bulleted"
+                            app:drawableTint="@color/second_black" />
 
-            <TextView
-                android:id="@+id/emptyContent"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
-                android:gravity="center"
-                android:text="@string/empty_content"
-                android:textColor="@color/hint_text"
-                android:textSize="18sp"
-                android:textStyle="italic"
-                android:visibility="visible"
-                app:layout_constraintTop_toBottomOf="@id/history_title" />
+                        <TextView
+                            android:id="@+id/grid_view"
+                            android:layout_width="100dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="12dp"
+                            android:drawablePadding="6dp"
+                            android:gravity="center_vertical"
+                            android:text="@string/grid"
+                            android:textColor="@color/second_black"
+                            android:textSize="15sp"
+                            app:drawableStartCompat="@drawable/view_grid_outline"
+                            app:drawableTint="@color/second_black" />
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/list_month"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:scrollbars="vertical"
-                android:visibility="invisible"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/history_title"
-                tools:listitem="@layout/month_label_item" />
-            <!--            </androidx.constraintlayout.widget.ConstraintLayout>-->
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+                <TextView
+                    android:id="@+id/emptyContent"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:gravity="center"
+                    android:text="@string/empty_content"
+                    android:textColor="@color/hint_text"
+                    android:textSize="18sp"
+                    android:textStyle="italic"
+                    android:visibility="visible"
+                    app:layout_constraintTop_toBottomOf="@id/history_title" />
+
+                <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/list_month"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:scrollbars="none"
+                    android:visibility="invisible"
+                    app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintTop_toBottomOf="@id/history_title"
+                    tools:listitem="@layout/month_label_item" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

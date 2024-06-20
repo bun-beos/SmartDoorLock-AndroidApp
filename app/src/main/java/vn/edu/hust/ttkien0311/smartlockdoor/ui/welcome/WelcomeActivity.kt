@@ -3,17 +3,21 @@ package vn.edu.hust.ttkien0311.smartlockdoor.ui.welcome
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import vn.edu.hust.ttkien0311.smartlockdoor.R
 import vn.edu.hust.ttkien0311.smartlockdoor.helper.EncryptedSharedPreferencesManager
-import vn.edu.hust.ttkien0311.smartlockdoor.ui.main.DoorFragment
 import vn.edu.hust.ttkien0311.smartlockdoor.ui.main.MainActivity
 import vn.edu.hust.ttkien0311.smartlockdoor.ui.main.NotificationDetailFragment
 
 class WelcomeActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         val sharedPreferencesManager = EncryptedSharedPreferencesManager(this)
-        sharedPreferencesManager.saveSelectedDevice("51b5f47b-b447-4f43-a59a-3b5473a8ef5e")
+//        sharedPreferencesManager.saveSelectedDevice("51b5f47b-b447-4f43-a59a-3b5473a8ef5e")
+//        sharedPreferencesManager.saveAccessToken("")
+//        sharedPreferencesManager.saveRefreshToken("")
+//        sharedPreferencesManager.saveRefreshTokenExpires("")
+//        sharedPreferencesManager.saveAccountId("")
+//        sharedPreferencesManager.saveSelectedDevice("")
+//        sharedPreferencesManager.saveLoginStatus(false)
         val fragmentToLoad = intent.getStringExtra("fragmentToLoad")
 
         super.onCreate(savedInstanceState)

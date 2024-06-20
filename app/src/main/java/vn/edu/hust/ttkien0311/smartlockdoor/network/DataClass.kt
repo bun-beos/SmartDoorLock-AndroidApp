@@ -102,8 +102,9 @@ data class Notification(
 
 data class Device(
     @Json(name = "DeviceId") val deviceId: String,
-    @Json(name = "AccountId") val accountId: String,
-    @Json(name = "DeviceName") val deviceName: String,
-    @Json(name = "DeviceState") val deviceState: String,
+    @Json(name = "AccountId") val accountId: String?,
+    @Json(name = "DeviceName") var deviceName: String,
+    @Json(name = "DeviceState") val deviceState: Int,
     @Json(name = "CreatedDate") val createdDate: String,
+    var selected: Boolean = false
 )
