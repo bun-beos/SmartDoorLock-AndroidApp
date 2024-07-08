@@ -15,6 +15,9 @@ private const val members_url = "/api/v1/Members"
 private const val images_url = "/api/v1/Images"
 private const val notifications_url = "/api/v1/Notifications"
 private const val device_url = "/api/v1/Devices"
+private const val mqtt_url = "/api/v1/Mqtt"
+
+enum class MessageType { ACCOUNT_ID, TOKEN, UPDATE_MEMBER, DEVICE_NAME, DOOR, LOG_OUT}
 
 interface ServerApiService {
     // Account*********************************************
@@ -70,7 +73,7 @@ interface ServerApiService {
 
     // Lấy danh sách thành viên
     @GET(members_url)
-    suspend fun getAllByDeviceMember(@Query("deviceId") deviceId: String): List<Member>
+    suspend fun getAllMemberByDevice(@Query("deviceId") deviceId: String): List<Member>
 
     // Lấy thông tin thành viên theo id
     @GET("${members_url}/{id}")
@@ -98,7 +101,7 @@ interface ServerApiService {
     suspend fun getOldestTime(@Path("deviceId") deviceId: String): String
 
     // Lấy ảnh theo thành viên hoặc thời gian
-    @GET(images_url)
+    @GET("${images_url}/Filter")
     suspend fun filterImage(
         @Query("deviceId") deviceId: String,
         @Query("memberId") memberId: String?,
@@ -160,4 +163,13 @@ interface ServerApiService {
     // Xóa thông tin thiết bị
     @DELETE("${device_url}/{deviceId}")
     suspend fun deleteDevice(@Path("deviceId") id: String): Int
+
+    // Mqtt
+    // Publish message
+    @POST("${mqtt_url}/Publish/Single")
+    suspend fun publishSingle(@Body mqttPublish: MqttPublish)
+
+    // Publish many message
+    @POST("${mqtt_url}/Publish/Multiple")
+    suspend fun publishMultiple(@Body listMqttPublish: List<MqttPublish>)
 }

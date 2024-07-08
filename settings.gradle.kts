@@ -16,6 +16,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "Smart Lock Door"
+rootProject.name = "Smart Door Lock"
 include(":app")
  

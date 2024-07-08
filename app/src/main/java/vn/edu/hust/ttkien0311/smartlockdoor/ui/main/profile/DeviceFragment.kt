@@ -1,7 +1,6 @@
 package vn.edu.hust.ttkien0311.smartlockdoor.ui.main.profile
 
 import android.app.AlertDialog
-import android.app.ProgressDialog.show
 import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -17,8 +16,6 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import vn.edu.hust.ttkien0311.smartlockdoor.R
 import vn.edu.hust.ttkien0311.smartlockdoor.databinding.DeviceItemBinding
@@ -28,6 +25,8 @@ import vn.edu.hust.ttkien0311.smartlockdoor.helper.AlertDialogHelper.showLoading
 import vn.edu.hust.ttkien0311.smartlockdoor.helper.EncryptedSharedPreferencesManager
 import vn.edu.hust.ttkien0311.smartlockdoor.helper.ExceptionHelper.handleException
 import vn.edu.hust.ttkien0311.smartlockdoor.network.Device
+import vn.edu.hust.ttkien0311.smartlockdoor.network.MessageType
+import vn.edu.hust.ttkien0311.smartlockdoor.network.MqttPublish
 import vn.edu.hust.ttkien0311.smartlockdoor.network.ServerApi
 import vn.edu.hust.ttkien0311.smartlockdoor.ui.main.home.HomeViewModel
 
@@ -55,10 +54,11 @@ class DeviceFragment : Fragment() {
 
         val sharedPreferencesManager = EncryptedSharedPreferencesManager(requireActivity())
         val accountId = sharedPreferencesManager.getAccountId()
+        val phoneToken = sharedPreferencesManager.getPhoneToken()
 
         binding.listDevice.adapter = DeviceListAdapter(requireContext(), accountId,
             { device ->
-                updateDevice(requireActivity(), device)
+                updateDevice(requireActivity(), device, phoneToken)
             },
             { device ->
                 onUpdateDeviceName(device)
@@ -109,11 +109,26 @@ class DeviceFragment : Fragment() {
         }
     }
 
-    private fun updateDevice(context: Context, device: Device) {
+    private fun updateDevice(context: Context, device: Device, phoneToken:String) {
         lifecycleScope.launch {
             try {
 //                showLoading(context)
                 ServerApi(context).retrofitService.updateDevice(device)
+                if (device.accountId.isNullOrEmpty()) {
+                    ServerApi(context).retrofitService.publishSingle(
+                        MqttPublish(
+                            "SDL_${device.deviceId}",
+                            "${MessageType.ACCOUNT_ID}:${MessageType.TOKEN}:"
+                        )
+                    )
+                } else {
+                    ServerApi(context).retrofitService.publishSingle(
+                        MqttPublish(
+                            "SDL_${device.deviceId}",
+                            "${MessageType.ACCOUNT_ID}:${device.accountId}${MessageType.TOKEN}:$phoneToken"
+                        )
+                    )
+                }
                 var newList = mutableListOf<Device>()
                 for (item in viewModel.devices.value!!) {
                     if (item.deviceId != device.deviceId) {
@@ -170,6 +185,12 @@ class DeviceFragment : Fragment() {
                 lifecycleScope.launch {
                     try {
                         showLoading(requireContext())
+                        ServerApi(requireContext()).retrofitService.publishSingle(
+                            MqttPublish(
+                                "SDL_${device.deviceId}",
+                                "${MessageType.DEVICE_NAME}:${editText.text.toString().trim()}"
+                            )
+                        )
                         ServerApi(requireContext()).retrofitService.updateDevice(
                             Device(
                                 device.deviceId,
@@ -183,13 +204,15 @@ class DeviceFragment : Fragment() {
                         var newList = mutableListOf<Device>()
                         for (item in viewModel.devices.value!!) {
                             if (item.deviceId == device.deviceId) {
-                                newList.add(Device(
-                                    device.deviceId,
-                                    device.accountId,
-                                    editText.text.toString().trim(),
-                                    device.deviceState,
-                                    device.createdDate
-                                ))
+                                newList.add(
+                                    Device(
+                                        device.deviceId,
+                                        device.accountId,
+                                        editText.text.toString().trim(),
+                                        device.deviceState,
+                                        device.createdDate
+                                    )
+                                )
                             } else {
                                 newList.add(item)
                             }
@@ -200,13 +223,15 @@ class DeviceFragment : Fragment() {
                         for (item in viewModel.devices.value!!) {
                             if (!item.accountId.isNullOrEmpty()) {
                                 if (item.deviceId == device.deviceId) {
-                                    newList.add(Device(
-                                        device.deviceId,
-                                        device.accountId,
-                                        editText.text.toString().trim(),
-                                        device.deviceState,
-                                        device.createdDate
-                                    ))
+                                    newList.add(
+                                        Device(
+                                            device.deviceId,
+                                            device.accountId,
+                                            editText.text.toString().trim(),
+                                            device.deviceState,
+                                            device.createdDate
+                                        )
+                                    )
                                 } else {
                                     newList.add(item)
                                 }

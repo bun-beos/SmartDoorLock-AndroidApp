@@ -64,7 +64,7 @@
                     android:textColor="@color/hint_text"
                     android:textSize="18sp"
                     android:textStyle="italic"
-                    android:visibility="visible"
+                    android:visibility="invisible"
                     app:layout_constraintTop_toTopOf="parent" />
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -76,7 +76,7 @@
                     android:paddingTop="11dp"
                     android:paddingEnd="10dp"
                     android:scrollbars="none"
-                    android:visibility="invisible"
+                    android:visibility="visible"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     app:layout_constraintTop_toTopOf="parent"
                     tools:listitem="@layout/my_device_item" />
@@ -90,7 +90,7 @@
                     android:gravity="center_vertical"
                     android:text="@string/history"
                     android:textColor="@color/second_black"
-                    android:textSize="18sp"
+                    android:textSize="20sp"
                     android:textStyle="bold|italic"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
@@ -109,9 +109,10 @@
                     android:id="@+id/cardViewMenu"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="-4dp"
+                    android:layout_marginTop="-2dp"
                     android:visibility="gone"
                     app:cardCornerRadius="8dp"
+                    app:cardElevation="10dp"
                     app:layout_constraintEnd_toEndOf="@id/dehaze_icon"
                     app:layout_constraintTop_toBottomOf="@id/dehaze_icon">
 
@@ -119,13 +120,14 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:padding="10dp">
+                        android:paddingHorizontal="8dp"
+                        android:paddingVertical="12dp">
 
                         <TextView
                             android:id="@+id/search"
-                            android:layout_width="100dp"
+                            android:layout_width="110dp"
                             android:layout_height="wrap_content"
-                            android:drawablePadding="6dp"
+                            android:drawablePadding="8dp"
                             android:gravity="center_vertical"
                             android:text="@string/search"
                             android:textColor="@color/second_black"
@@ -135,10 +137,10 @@
 
                         <TextView
                             android:id="@+id/list_view"
-                            android:layout_width="100dp"
+                            android:layout_width="110dp"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="12dp"
-                            android:drawablePadding="6dp"
+                            android:drawablePadding="8dp"
                             android:gravity="center_vertical"
                             android:text="@string/list"
                             android:textColor="@color/second_black"
@@ -149,10 +151,10 @@
 
                         <TextView
                             android:id="@+id/grid_view"
-                            android:layout_width="100dp"
+                            android:layout_width="110dp"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="12dp"
-                            android:drawablePadding="6dp"
+                            android:drawablePadding="8dp"
                             android:gravity="center_vertical"
                             android:text="@string/grid"
                             android:textColor="@color/second_black"
@@ -173,15 +175,16 @@
                     android:textColor="@color/hint_text"
                     android:textSize="18sp"
                     android:textStyle="italic"
-                    android:visibility="visible"
+                    android:visibility="invisible"
                     app:layout_constraintTop_toBottomOf="@id/history_title" />
 
                 <androidx.recyclerview.widget.RecyclerView
+                    android:layout_marginTop="10dp"
                     android:id="@+id/list_month"
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
                     android:scrollbars="none"
-                    android:visibility="invisible"
+                    android:visibility="visible"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/history_title"

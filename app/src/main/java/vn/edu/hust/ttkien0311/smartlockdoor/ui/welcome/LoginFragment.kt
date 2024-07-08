@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.findNavController
 import com.google.android.gms.tasks.OnCompleteListener
@@ -25,11 +26,16 @@ import vn.edu.hust.ttkien0311.smartlockdoor.helper.ExceptionHelper.handleExcepti
 import vn.edu.hust.ttkien0311.smartlockdoor.helper.Helper.validateEmail
 import vn.edu.hust.ttkien0311.smartlockdoor.helper.Helper.validatePassword
 import vn.edu.hust.ttkien0311.smartlockdoor.network.AccountDto
+import vn.edu.hust.ttkien0311.smartlockdoor.network.Device
+import vn.edu.hust.ttkien0311.smartlockdoor.network.MessageType
+import vn.edu.hust.ttkien0311.smartlockdoor.network.MqttPublish
 import vn.edu.hust.ttkien0311.smartlockdoor.network.ServerApi
+import vn.edu.hust.ttkien0311.smartlockdoor.ui.main.home.HomeViewModel
 
 class LoginFragment : Fragment() {
     private lateinit var binding: FragmentLoginBinding
     private var phoneToken: String = ""
+    private val homeViewModel: HomeViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +46,7 @@ class LoginFragment : Fragment() {
             }
             // Get new FCM registration token
             phoneToken = task.result
+            EncryptedSharedPreferencesManager(requireContext()).savePhoneToken(phoneToken)
             Log.d("SLD", "FCM registration token: $phoneToken")
         })
     }
@@ -97,18 +104,43 @@ class LoginFragment : Fragment() {
                         showLoading(requireActivity())
                         delay(600)
 
-                        val response = ServerApi(requireActivity()).retrofitService.login(accountDto)
+                        val response =
+                            ServerApi(requireActivity()).retrofitService.login(accountDto)
 
-                        val sharedPreferencesManager = EncryptedSharedPreferencesManager(requireContext())
+                        val sharedPreferencesManager =
+                            EncryptedSharedPreferencesManager(requireContext())
                         sharedPreferencesManager.saveAccessToken(response.accessToken)
                         sharedPreferencesManager.saveRefreshToken(response.refreshToken)
                         sharedPreferencesManager.saveRefreshTokenExpires(response.refreshTokenExpires)
                         sharedPreferencesManager.saveLoginStatus(true)
 
                         val account = ServerApi(requireActivity()).retrofitService.getAccountInfo()
-                        hideLoading()
 
                         sharedPreferencesManager.saveAccountId(account.accountId)
+
+                        val listDevice =
+                            ServerApi(requireContext()).retrofitService.getDeviceByAccount(account.accountId)
+                        val newList = mutableListOf<Device>()
+                        for (device in listDevice) {
+                            newList.add(device)
+                        }
+                        homeViewModel.setMyListDevice(newList)
+
+                        if (listDevice.isNotEmpty()) {
+                            val listMessage = mutableListOf<MqttPublish>()
+                            for (device in listDevice) {
+                                listMessage.add(
+                                    MqttPublish(
+                                        "SDL_${device.deviceId}",
+                                        "${MessageType.ACCOUNT_ID}:${account.accountId}${MessageType.TOKEN}:${phoneToken}"
+                                    )
+                                )
+                            }
+
+                            ServerApi(requireContext()).retrofitService.publishMultiple(listMessage)
+                        }
+                        hideLoading()
+
 
                         val intent = Intent(activity, MainActivity::class.java)
                         startActivity(intent)

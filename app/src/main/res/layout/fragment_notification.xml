@@ -57,6 +57,7 @@
             android:id="@+id/swipeRefreshLayout"
             android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:paddingBottom="12dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/linearLayout">
 
@@ -64,9 +65,8 @@
                 android:id="@+id/list_notification"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:paddingBottom="12dp"
                 android:scrollbars="vertical"
-                android:visibility="invisible"
+                android:visibility="visible"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 tools:listitem="@layout/notification_item" />
         </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

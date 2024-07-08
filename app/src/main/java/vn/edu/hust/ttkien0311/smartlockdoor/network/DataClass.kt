@@ -108,3 +108,8 @@ data class Device(
     @Json(name = "CreatedDate") val createdDate: String,
     var selected: Boolean = false
 )
+
+data class MqttPublish(
+    @Json(name = "Topic") val topic: String,
+    @Json(name = "Payload") val payload: String
+)

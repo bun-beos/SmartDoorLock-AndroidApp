@@ -50,6 +50,7 @@ class AuthorizedInterceptor(private val context: Context) : Interceptor {
         sharedPreferencesManager.saveAccountId("")
         sharedPreferencesManager.saveSelectedDevice("")
         sharedPreferencesManager.saveLoginStatus(false)
+        sharedPreferencesManager.savePhoneToken("")
 
         val intent = Intent(context, WelcomeActivity::class.java)
         context.startActivity(intent)

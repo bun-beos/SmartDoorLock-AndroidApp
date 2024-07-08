@@ -18,6 +18,7 @@ import vn.edu.hust.ttkien0311.smartlockdoor.helper.AlertDialogHelper.hideLoading
 import vn.edu.hust.ttkien0311.smartlockdoor.helper.AlertDialogHelper.showLoading
 import vn.edu.hust.ttkien0311.smartlockdoor.helper.ExceptionHelper.handleException
 import vn.edu.hust.ttkien0311.smartlockdoor.helper.Helper.formatDateTime
+import vn.edu.hust.ttkien0311.smartlockdoor.helper.Helper.handleDoor
 import vn.edu.hust.ttkien0311.smartlockdoor.network.ServerApi
 import vn.edu.hust.ttkien0311.smartlockdoor.ui.welcome.WelcomeActivity
 
@@ -25,6 +26,7 @@ class NotificationDetailFragment : Fragment() {
     private lateinit var binding: FragmentNotificationDetailBinding
     private var notifId: String? = null
     private var doorState: String? = null
+    private var deviceId: String? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -63,6 +65,7 @@ class NotificationDetailFragment : Fragment() {
                 try {
                     showLoading(requireActivity())
                     val res = ServerApi(requireActivity()).retrofitService.getByNotifId(notifId!!)
+                    deviceId = res?.deviceId
                     hideLoading()
 
                     if (res != null) {
@@ -94,11 +97,17 @@ class NotificationDetailFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         binding.cardView.setOnClickListener {
             if (doorState == "CLOSE") {
+                if (deviceId != null) {
+                    handleDoor(requireContext(), deviceId!!, 1)
+                }
                 doorState = "OPEN"
                 binding.doorStateIcon.setImageResource(R.drawable.ic_door_open)
                 binding.doorStateName.text = "Mở"
                 binding.doorStateName.setTextColor(Color.parseColor("#29DF00"))
             } else {
+                if (deviceId != null) {
+                    handleDoor(requireContext(), deviceId!!, 0)
+                }
                 doorState = "CLOSE"
                 binding.doorStateIcon.setImageResource(R.drawable.ic_door_closed)
                 binding.doorStateName.text = "Đóng"

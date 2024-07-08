@@ -82,4 +82,14 @@ class EncryptedSharedPreferencesManager(context: Context) {
     fun getAccountId(): String {
         return sharedPreferences.getString("account_id", "").toString()
     }
+
+    fun savePhoneToken(phoneToken: String) {
+        sharedPreferences.edit()
+            .putString("phone_token", phoneToken)
+            .apply()
+    }
+
+    fun getPhoneToken(): String {
+        return sharedPreferences.getString("phone_token", "").toString()
+    }
 }

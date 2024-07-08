@@ -25,12 +25,13 @@
                 android:background="@color/white"
                 android:gravity="center_vertical"
                 android:orientation="horizontal"
-                android:paddingStart="4dp"
+                android:paddingVertical="6dp"
+                android:paddingStart="8dp"
                 android:paddingEnd="20dp">
 
                 <ImageView
-                    android:layout_width="70dp"
-                    android:layout_height="50dp"
+                    android:layout_width="60dp"
+                    android:layout_height="40dp"
                     android:src="@drawable/tablet_face" />
 
                 <View
@@ -45,7 +46,7 @@
                     android:background="@color/primary_variant"
                     android:src="@drawable/baseline_check_24"
                     android:tint="@color/white"
-                    android:visibility="visible"
+                    android:visibility="invisible"
                     app:shapeAppearanceOverlay="@style/circular" />
             </LinearLayout>
 
@@ -53,13 +54,15 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:padding="7dp">
+                android:paddingHorizontal="10dp"
+                android:paddingBottom="4dp">
 
                 <TextView
                     android:id="@+id/device_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    tools:text="DEVICE_51b334233423432443567890" />
+                    android:textSize="15sp"
+                    tools:text="DEVICE_001" />
             </LinearLayout>
         </LinearLayout>
     </androidx.cardview.widget.CardView>

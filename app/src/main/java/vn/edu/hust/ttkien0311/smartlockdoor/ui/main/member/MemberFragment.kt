@@ -1,6 +1,8 @@
 package vn.edu.hust.ttkien0311.smartlockdoor.ui.main.member
 
+import android.app.AlertDialog
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -19,6 +21,8 @@ import vn.edu.hust.ttkien0311.smartlockdoor.helper.AlertDialogHelper.showLoading
 import vn.edu.hust.ttkien0311.smartlockdoor.helper.EncryptedSharedPreferencesManager
 import vn.edu.hust.ttkien0311.smartlockdoor.helper.ExceptionHelper.handleException
 import vn.edu.hust.ttkien0311.smartlockdoor.helper.Helper.formatDateTime
+import vn.edu.hust.ttkien0311.smartlockdoor.network.MessageType
+import vn.edu.hust.ttkien0311.smartlockdoor.network.MqttPublish
 import vn.edu.hust.ttkien0311.smartlockdoor.network.ServerApi
 
 class MemberFragment : Fragment() {
@@ -46,19 +50,48 @@ class MemberFragment : Fragment() {
             if (viewModel.members.value == null) {
                 getListMember(currentDeviceId)
             } else {
-                binding.listMember.adapter =
-                    MemberAdapter(viewModel.members.value!!, MemberItemListener { member ->
-                        viewModel.onMemberRowClicked(member)
-                        val action = MemberFragmentDirections.actionMemberFragmentToMemberDetailFragment(currentDeviceId)
-                        findNavController().navigate(action)
-                    })
-                binding.listMember.visibility = View.VISIBLE
-                binding.emptyContent.visibility = View.GONE
+                if (viewModel.members.value!!.isNotEmpty()) {
+                    binding.listMember.adapter =
+                        MemberAdapter(viewModel.members.value!!, MemberItemListener { member ->
+                            viewModel.onMemberRowClicked(member)
+                            val action =
+                                MemberFragmentDirections.actionMemberFragmentToMemberDetailFragment(
+                                    currentDeviceId
+                                )
+                            findNavController().navigate(action)
+                        })
+                    binding.listMember.visibility = View.VISIBLE
+                    binding.emptyContent.visibility = View.GONE
+                } else {
+                    binding.listMember.visibility = View.GONE
+                    binding.emptyContent.visibility = View.VISIBLE
+                }
             }
         }
 
-        binding.magnifyIcon.setOnClickListener {
-            Toast.makeText(requireActivity(), "Coming soon", Toast.LENGTH_SHORT).show()
+        binding.exportUpdateData.setOnClickListener {
+            lifecycleScope.launch {
+                try {
+                    showLoading(requireActivity())
+                    ServerApi(requireContext()).retrofitService.publishSingle(
+                        MqttPublish(
+                            "SDL_${sharedPreferencesManager.getSelectedDevice()}",
+                            "${MessageType.UPDATE_MEMBER}:"
+                        )
+                    )
+                    hideLoading()
+                    AlertDialog.Builder(requireActivity())
+                        .setMessage("Thành công!")
+                        .setPositiveButton("Ok") { dialog, _ ->
+                            dialog.dismiss()
+                        }
+                        .create()
+                        .show()
+                } catch (ex: Exception) {
+                    hideLoading()
+                    handleException(ex, requireActivity())
+                }
+            }
         }
 
         binding.addCircleIcon.setOnClickListener {
@@ -78,7 +111,7 @@ class MemberFragment : Fragment() {
             )
         )
         binding.swipeRefreshLayout.setOnRefreshListener {
-            getListMember(currentDeviceId)
+            getListMember(sharedPreferencesManager.getSelectedDevice())
             hideLoading()
         }
 
@@ -90,13 +123,12 @@ class MemberFragment : Fragment() {
 
     }
 
-    private fun getListMember(deviceId:String) {
+    private fun getListMember(deviceId: String) {
         lifecycleScope.launch {
             try {
                 showLoading(requireActivity())
-                val res = ServerApi(requireActivity()).retrofitService.getAllByDeviceMember(
-                    deviceId
-                )
+                val res =
+                    ServerApi(requireActivity()).retrofitService.getAllMemberByDevice(deviceId)
                 hideLoading()
 
                 if (res.isNotEmpty()) {
@@ -110,7 +142,10 @@ class MemberFragment : Fragment() {
                     binding.listMember.adapter =
                         MemberAdapter(viewModel.members.value!!, MemberItemListener { member ->
                             viewModel.onMemberRowClicked(member)
-                            val action = MemberFragmentDirections.actionMemberFragmentToMemberDetailFragment(deviceId)
+                            val action =
+                                MemberFragmentDirections.actionMemberFragmentToMemberDetailFragment(
+                                    deviceId
+                                )
                             findNavController().navigate(action)
                         })
                     binding.listMember.visibility = View.VISIBLE

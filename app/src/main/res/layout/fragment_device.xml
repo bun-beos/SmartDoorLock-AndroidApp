@@ -47,7 +47,7 @@
                 android:layout_height="match_parent"
                 android:paddingStart="12dp"
                 android:paddingEnd="12dp"
-                android:visibility="invisible"
+                android:visibility="visible"
                 app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                 app:listDevice="@{viewModel.devices}"
                 tools:listitem="@layout/device_item" />

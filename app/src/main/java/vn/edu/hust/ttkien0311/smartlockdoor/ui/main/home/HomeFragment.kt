@@ -20,9 +20,13 @@ import vn.edu.hust.ttkien0311.smartlockdoor.helper.AlertDialogHelper.hideLoading
 import vn.edu.hust.ttkien0311.smartlockdoor.helper.AlertDialogHelper.showLoading
 import vn.edu.hust.ttkien0311.smartlockdoor.helper.EncryptedSharedPreferencesManager
 import vn.edu.hust.ttkien0311.smartlockdoor.helper.ExceptionHelper.handleException
+import vn.edu.hust.ttkien0311.smartlockdoor.helper.Helper
 import vn.edu.hust.ttkien0311.smartlockdoor.network.Device
+import vn.edu.hust.ttkien0311.smartlockdoor.network.MessageType
 import vn.edu.hust.ttkien0311.smartlockdoor.network.MonthLabel
+import vn.edu.hust.ttkien0311.smartlockdoor.network.MqttPublish
 import vn.edu.hust.ttkien0311.smartlockdoor.network.ServerApi
+import vn.edu.hust.ttkien0311.smartlockdoor.ui.main.member.MemberViewModel
 import java.time.LocalDate
 import java.time.OffsetDateTime
 import java.time.format.DateTimeFormatter
@@ -32,6 +36,7 @@ enum class HistoryMode { LIST, GRID }
 class HomeFragment : Fragment() {
     private lateinit var binding: FragmentHomeBinding
     private val viewModel: HomeViewModel by activityViewModels()
+    private val memberViewModel: MemberViewModel by activityViewModels()
     private var cardMenuState: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -53,6 +58,7 @@ class HomeFragment : Fragment() {
         val sharedPreferencesManager = EncryptedSharedPreferencesManager(requireContext())
         val myAccountId = sharedPreferencesManager.getAccountId()
         val currentDeviceId = sharedPreferencesManager.getSelectedDevice()
+        val phoneToken = sharedPreferencesManager.getPhoneToken()
 
         if (viewModel.historyMode.value == null) {
             viewModel.setMode(HistoryMode.LIST.toString())
@@ -78,11 +84,12 @@ class HomeFragment : Fragment() {
 //            }
 
         if (viewModel.devices.value.isNullOrEmpty()) {
-            getMyListDevice(requireContext(), myAccountId, currentDeviceId)
+            getMyListDevice(requireContext(), myAccountId, currentDeviceId, phoneToken)
         } else {
             binding.listDevice.adapter =
                 MyDeviceListAdapter(requireActivity(), viewModel.devices.value!!) { id ->
                     getListLabel(id)
+                    getListMember(id)
                     binding.listDevice.scrollToPosition(0)
                 }
 
@@ -119,7 +126,8 @@ class HomeFragment : Fragment() {
             getMyListDevice(
                 requireContext(),
                 myAccountId,
-                sharedPreferencesManager.getSelectedDevice()
+                sharedPreferencesManager.getSelectedDevice(),
+                phoneToken
             )
             hideLoading()
         }
@@ -203,7 +211,12 @@ class HomeFragment : Fragment() {
         })
     }
 
-    private fun getMyListDevice(context: Context, accountId: String, deviceId: String) {
+    private fun getMyListDevice(
+        context: Context,
+        accountId: String,
+        deviceId: String,
+        phoneToken: String
+    ) {
         lifecycleScope.launch {
             try {
                 showLoading(context)
@@ -224,6 +237,7 @@ class HomeFragment : Fragment() {
                     }
                 }
                 viewModel.setMyListDevice(newList)
+
                 binding.listDevice.adapter =
                     MyDeviceListAdapter(context, viewModel.devices.value!!) { id ->
                         getListLabel(id)
@@ -252,19 +266,24 @@ class HomeFragment : Fragment() {
                 val res =
                     ServerApi(requireActivity()).retrofitService.getOldestTime(deviceId)
 //                hideLoading()
-
-                viewModel.setListDate(createListMonth(res))
-                binding.listMonth.adapter = MonthListAdapter(
-                    requireActivity(),
-                    deviceId,
-                    viewModel.dates.value!!,
-                    viewModel.historyMode.value!!,
-                    HistoryRowListener { image ->
-                        viewModel.onHistoryRowClicked(image)
-                        findNavController().navigate(R.id.action_homeFragment_to_historyDetailFragment)
-                    })
-                binding.listMonth.visibility = View.VISIBLE
-                binding.emptyContent.visibility = View.GONE
+                val listDate = createListMonth(res)
+                if (listDate.isEmpty()) {
+                    binding.listMonth.visibility = View.GONE
+                    binding.emptyContent.visibility = View.VISIBLE
+                } else {
+                    viewModel.setListDate(listDate)
+                    binding.listMonth.adapter = MonthListAdapter(
+                        requireActivity(),
+                        deviceId,
+                        viewModel.dates.value!!,
+                        viewModel.historyMode.value!!,
+                        HistoryRowListener { image ->
+                            viewModel.onHistoryRowClicked(image)
+                            findNavController().navigate(R.id.action_homeFragment_to_historyDetailFragment)
+                        })
+                    binding.listMonth.visibility = View.VISIBLE
+                    binding.emptyContent.visibility = View.GONE
+                }
             } catch (ex: Exception) {
 //                hideLoading()
                 handleException(ex, requireActivity())
@@ -284,12 +303,27 @@ class HomeFragment : Fragment() {
 
         val listMonthLabel = mutableListOf<MonthLabel>()
 
-        while (oldestDate.isBefore(currentDate)) {
+        while (oldestDate.isBefore(currentDate) || oldestDate.isEqual(currentDate)) {
             listMonthLabel.add(MonthLabel(currentDate))
             currentDate = currentDate.plusMonths(-1)
         }
-        listMonthLabel.add(MonthLabel(oldestDate))
 
         return listMonthLabel
+    }
+
+    private fun getListMember(deviceId: String) {
+        lifecycleScope.launch {
+            try {
+                val res = ServerApi(requireContext()).retrofitService.getAllMemberByDevice(deviceId)
+                for (member in res) {
+                    member.createdDate =
+                        Helper.formatDateTime(member.createdDate, "HH:mm - dd/MM/yyyy")
+                    member.dateOfBirth = Helper.formatDateTime(member.dateOfBirth, "dd/MM/yyyy")
+                }
+                memberViewModel.setListMember(res)
+            } catch (ex: Exception) {
+                ex.printStackTrace()
+            }
+        }
     }
 }

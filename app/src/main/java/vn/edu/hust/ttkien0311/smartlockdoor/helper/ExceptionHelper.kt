@@ -29,6 +29,7 @@ object ExceptionHelper {
 
     fun handleException(ex: Exception, context: Context) {
         Log.d("SLD", "Exception: $ex")
+        ex.printStackTrace()
         when (ex) {
             is SocketException -> {
                 showAlertDialog(
@@ -60,7 +61,7 @@ object ExceptionHelper {
                         }
                         Log.d("SLD", "Dev message: ${jsonMsg?.devMessage}")
                     } catch (ex: Exception) {
-
+                        ex.printStackTrace()
                     }
                 }
             }

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Smart Lock Door</string>
+    <string name="app_name">Smart Door Lock</string>
     <string name="default_notification_channel_id">notification_channel</string>
     <string name="default_notification_channel_name">Khóa cửa</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -9,7 +9,7 @@
     <string name="user_name_hint">Tên đăng nhập</string>
     <string name="password_hint">Mật khẩu</string>
     <string name="login">Đăng nhập</string>
-    <string name="welcome_title">Smart Lock Door</string>
+    <string name="welcome_title">Smart Door Lock</string>
     <string name="signup">Đăng ký</string>
     <string name="create_account">Tạo tài khoản</string>
     <string name="signup_now">Đăng ký ngay</string>
@@ -54,4 +54,5 @@
     <string name="list">Danh sách</string>
     <string name="grid">Lưới</string>
     <string name="ok">Ok</string>
+    <string name="add_member">Thêm thành viên</string>
 </resources>

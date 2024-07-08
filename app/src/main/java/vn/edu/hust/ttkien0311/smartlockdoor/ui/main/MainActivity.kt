@@ -2,11 +2,15 @@ package vn.edu.hust.ttkien0311.smartlockdoor.ui.main
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.findNavController
+import com.google.android.gms.tasks.OnCompleteListener
+import com.google.firebase.messaging.FirebaseMessaging
 import vn.edu.hust.ttkien0311.smartlockdoor.R
 import vn.edu.hust.ttkien0311.smartlockdoor.databinding.ActivityMainBinding
+import vn.edu.hust.ttkien0311.smartlockdoor.helper.EncryptedSharedPreferencesManager
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
@@ -15,16 +19,20 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        val sharedPreferencesManager = EncryptedSharedPreferencesManager(this)
 
-//        FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
-//            if (!task.isSuccessful) {
-//                Log.w("SLD", "Fetching FCM registration token failed", task.exception)
-//                return@OnCompleteListener
-//            }
-//            // Get new FCM registration token
-//            val token = task.result
-//            Log.d("SLD", "FCM registration token: $token")
-//        })
+//        if (sharedPreferencesManager.getPhoneToken().isEmpty()) {
+//            FirebaseMessaging.getInstance().token.addOnCompleteListener(OnCompleteListener { task ->
+//                if (!task.isSuccessful) {
+//                    Log.w("SLD", "Fetching FCM registration token failed", task.exception)
+//                    return@OnCompleteListener
+//                }
+//                // Get new FCM registration token
+//                val token = task.result
+//                sharedPreferencesManager.savePhoneToken(token)
+//                Log.d("SLD", "FCM registration token: $token")
+//            })
+//        }
 
         binding.bottomNavigationView.setOnItemSelectedListener {
             val navController = findNavController(this, R.id.nav_host)

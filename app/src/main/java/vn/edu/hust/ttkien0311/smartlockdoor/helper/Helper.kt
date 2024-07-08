@@ -1,11 +1,20 @@
 package vn.edu.hust.ttkien0311.smartlockdoor.helper
 
+import android.content.Context
 import android.graphics.Bitmap
 import android.os.Build
 import android.util.Base64
 import androidx.annotation.RequiresApi
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import vn.edu.hust.ttkien0311.smartlockdoor.network.MessageType
+import vn.edu.hust.ttkien0311.smartlockdoor.network.MqttPublish
+import vn.edu.hust.ttkien0311.smartlockdoor.network.ServerApi
 import java.io.ByteArrayOutputStream
 import java.time.LocalDate
 import java.time.OffsetDateTime
@@ -14,7 +23,7 @@ import java.time.format.DateTimeParseException
 
 object Helper {
     fun validateEmail(emailInput: TextInputEditText, emailLayout: TextInputLayout): Boolean {
-        val emailPattern = Regex("[a-zA-Z\\d._-]+@[a-z]+\\.+[a-z]+")
+        val emailPattern = Regex("[a-zA-Z\\d._-]+@[a-z.]+\\.+[a-z]+")
         val email = emailInput.text.toString().trim()
         return when {
             email.isEmpty() -> {
@@ -92,7 +101,6 @@ object Helper {
         }
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun formatDateTime(date: String?, pattern: String): String {
         if (date.isNullOrEmpty()) {
             return ""
@@ -102,7 +110,6 @@ object Helper {
         return dateTime.format(DateTimeFormatter.ofPattern(pattern))
     }
 
-    @RequiresApi(Build.VERSION_CODES.O)
     fun validateDateOfBirth(dateOfBirth: String?): Boolean {
         if (dateOfBirth.isNullOrEmpty()) {
             return true
@@ -132,5 +139,23 @@ object Helper {
         bitmap.compress(Bitmap.CompressFormat.JPEG, 50, outputStream)
         val byteArray = outputStream.toByteArray()
         return Base64.encodeToString(byteArray, Base64.DEFAULT)
+    }
+
+    fun handleDoor(context: Context, deviceId: String, doorState: Int) {
+        CoroutineScope(Dispatchers.Main).launch {
+            try {
+                AlertDialogHelper.showLoading(context)
+                ServerApi(context).retrofitService.publishSingle(
+                    MqttPublish(
+                        "SDL_${deviceId}",
+                        "${MessageType.DOOR}:${doorState}"
+                    )
+                )
+                AlertDialogHelper.hideLoading()
+            } catch (ex: Exception) {
+                AlertDialogHelper.hideLoading()
+                ExceptionHelper.handleException(ex, context)
+            }
+        }
     }
 }

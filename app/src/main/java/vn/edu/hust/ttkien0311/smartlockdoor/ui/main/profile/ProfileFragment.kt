@@ -27,11 +27,15 @@ import vn.edu.hust.ttkien0311.smartlockdoor.helper.AlertDialogHelper.showLoading
 import vn.edu.hust.ttkien0311.smartlockdoor.helper.EncryptedSharedPreferencesManager
 import vn.edu.hust.ttkien0311.smartlockdoor.helper.ExceptionHelper.handleException
 import vn.edu.hust.ttkien0311.smartlockdoor.helper.Helper.bitmapToBase64
+import vn.edu.hust.ttkien0311.smartlockdoor.network.MessageType
+import vn.edu.hust.ttkien0311.smartlockdoor.network.MqttPublish
 import vn.edu.hust.ttkien0311.smartlockdoor.network.ServerApi
+import vn.edu.hust.ttkien0311.smartlockdoor.ui.main.home.HomeViewModel
 
 class ProfileFragment : Fragment() {
     private lateinit var binding: FragmentProfileBinding
     private val viewModel: ProfileViewModel by activityViewModels()
+    private val homeViewModel: HomeViewModel by activityViewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,11 +71,11 @@ class ProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (viewModel.account.value == null) {
-            binding.logOut.visibility = View.INVISIBLE
-        } else {
+//        if (viewModel.account.value == null) {
+//            binding.logOut.visibility = View.INVISIBLE
+//        } else {
+//        }
             binding.logOut.visibility = View.VISIBLE
-        }
 
         binding.userImage.setOnClickListener {
             ImagePicker.with(this)
@@ -112,9 +116,19 @@ class ProfileFragment : Fragment() {
                         lifecycleScope.launch {
                             try {
                                 showLoading(requireActivity())
-                                ServerApi(requireActivity()).retrofitService.logOut(
+                                ServerApi(requireContext()).retrofitService.logOut(
                                     sharedPreferencesManager.getRefreshToken()
                                 )
+                                val listMessage = mutableListOf<MqttPublish>()
+                                if (!homeViewModel.devices.value.isNullOrEmpty()) {
+                                    for (device in homeViewModel.devices.value!!) {
+                                        listMessage.add(MqttPublish(
+                                            "SDL_${device.deviceId}",
+                                            "${MessageType.LOG_OUT}:"
+                                        ))
+                                    }
+                                }
+                                val res = ServerApi(requireContext()).retrofitService.publishMultiple(listMessage)
                             } catch (ex: Exception) {
                                 Log.d("SLD", "$ex")
                             }
@@ -185,6 +199,7 @@ class ProfileFragment : Fragment() {
         sharedPreferencesManager.saveAccountId("")
         sharedPreferencesManager.saveSelectedDevice("")
         sharedPreferencesManager.saveLoginStatus(false)
+        sharedPreferencesManager.savePhoneToken("")
 
         val intent = Intent(requireActivity(), WelcomeActivity::class.java)
         startActivity(intent)

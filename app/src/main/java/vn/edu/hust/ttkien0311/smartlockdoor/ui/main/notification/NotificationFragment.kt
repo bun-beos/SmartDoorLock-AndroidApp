@@ -32,7 +32,6 @@ import vn.edu.hust.ttkien0311.smartlockdoor.network.ServerApi
 class NotificationFragment : Fragment() {
     private lateinit var binding: FragmentNotificationBinding
     private val viewModel: NotificationViewModel by activityViewModels()
-    private var myAccountId = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,11 +49,10 @@ class NotificationFragment : Fragment() {
             DataBindingUtil.inflate(inflater, R.layout.fragment_notification, container, false)
         binding.lifecycleOwner = this
 
-        val sharedPreferencesManager = EncryptedSharedPreferencesManager(requireActivity())
-        myAccountId = sharedPreferencesManager.getAccountId()
+        val myAccountId = EncryptedSharedPreferencesManager(requireActivity()).getAccountId()
 
         if (viewModel.notification.value.isNullOrEmpty()) {
-            getListNotification()
+            getListNotification(myAccountId)
         } else {
             val adapter =
                 NotificationListAdapter(requireContext(), viewModel.notification.value!!) {
@@ -85,19 +83,19 @@ class NotificationFragment : Fragment() {
             )
         )
         binding.swipeRefreshLayout.setOnRefreshListener {
-            getListNotification()
+            getListNotification(myAccountId)
             hideLoading()
         }
 
         return binding.root
     }
 
-    private fun getListNotification() {
+    private fun getListNotification(accountId:String) {
         lifecycleScope.launch {
             try {
                 showLoading(requireActivity())
                 val res =
-                    ServerApi(requireActivity()).retrofitService.FilterNotification(myAccountId)
+                    ServerApi(requireActivity()).retrofitService.FilterNotification(accountId)
                 hideLoading()
 
                 if (res.isNotEmpty()) {
@@ -170,6 +168,7 @@ class NotificationListAdapter(
         RecyclerView.ViewHolder(binding.root) {
         fun bind(context: Context, notification: Notification) {
             binding.notification = notification
+
             if (notification.state == 1) {
                 binding.createdDate.textSize = 15f
                 binding.createdDate.setTextColor(Color.parseColor("#6F6F6F"))
@@ -180,6 +179,7 @@ class NotificationListAdapter(
                 binding.createdDate.setTextColor(Color.parseColor("#000000"))
                 binding.notifState.visibility = View.VISIBLE
             }
+
             binding.cardView.setOnClickListener {
                 notification.state = 1
                 binding.createdDate.textSize = 15f

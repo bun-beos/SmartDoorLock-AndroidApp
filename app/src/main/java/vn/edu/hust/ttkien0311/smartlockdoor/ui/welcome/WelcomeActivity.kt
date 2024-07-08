@@ -18,6 +18,7 @@ class WelcomeActivity : AppCompatActivity() {
 //        sharedPreferencesManager.saveAccountId("")
 //        sharedPreferencesManager.saveSelectedDevice("")
 //        sharedPreferencesManager.saveLoginStatus(false)
+//        sharedPreferencesManager.savePhoneToken("")
         val fragmentToLoad = intent.getStringExtra("fragmentToLoad")
 
         super.onCreate(savedInstanceState)

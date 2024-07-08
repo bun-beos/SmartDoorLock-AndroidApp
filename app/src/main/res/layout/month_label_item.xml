@@ -58,7 +58,7 @@
             android:layout_height="wrap_content"
             android:paddingBottom="12dp"
             android:scrollbars="vertical"
-            android:visibility="gone"
+            android:visibility="visible"
             tools:listitem="@layout/history_item" />
 
         <TextView

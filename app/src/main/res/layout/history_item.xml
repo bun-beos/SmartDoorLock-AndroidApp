@@ -72,7 +72,7 @@
         <androidx.cardview.widget.CardView
             android:id="@+id/cardViewGrid"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_height="230dp"
             android:onClick="@{() -> clickListener.onClick(image)}"
             android:visibility="gone"
             app:cardCornerRadius="10dp">
@@ -84,8 +84,8 @@
                 android:padding="10dp">
 
                 <androidx.cardview.widget.CardView
-                    android:layout_width="130dp"
-                    android:layout_height="130dp"
+                    android:layout_width="160dp"
+                    android:layout_height="160dp"
                     android:layout_gravity="center_horizontal"
                     app:cardCornerRadius="10dp">
 
