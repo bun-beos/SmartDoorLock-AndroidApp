@@ -124,6 +124,8 @@ class LoginFragment : Fragment() {
                         for (device in listDevice) {
                             newList.add(device)
                         }
+                        newList[0].selected = true
+                        sharedPreferencesManager.saveSelectedDevice(newList[0].deviceId)
                         homeViewModel.setMyListDevice(newList)
 
                         if (listDevice.isNotEmpty()) {

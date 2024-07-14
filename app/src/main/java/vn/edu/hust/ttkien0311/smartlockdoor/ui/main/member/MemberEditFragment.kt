@@ -28,6 +28,7 @@ import vn.edu.hust.ttkien0311.smartlockdoor.R
 import vn.edu.hust.ttkien0311.smartlockdoor.databinding.FragmentMemberEditBinding
 import vn.edu.hust.ttkien0311.smartlockdoor.helper.AlertDialogHelper.hideLoading
 import vn.edu.hust.ttkien0311.smartlockdoor.helper.AlertDialogHelper.showLoading
+import vn.edu.hust.ttkien0311.smartlockdoor.helper.EncryptedSharedPreferencesManager
 import vn.edu.hust.ttkien0311.smartlockdoor.helper.ExceptionHelper.handleException
 import vn.edu.hust.ttkien0311.smartlockdoor.helper.Helper
 import vn.edu.hust.ttkien0311.smartlockdoor.helper.Helper.formatDateTime
@@ -189,7 +190,7 @@ class MemberEditFragment : Fragment() {
         }
     }
 
-     fun clickUpdateBtn() {
+    private fun clickUpdateBtn() {
         if (binding.memberImage.drawable != null) {
             imageChecked = true
         } else {
@@ -273,6 +274,22 @@ class MemberEditFragment : Fragment() {
                     }
 
                     if (res != null) {
+                        val listMember =
+                            ServerApi(requireActivity()).retrofitService.getAllMemberByDevice(
+                                EncryptedSharedPreferencesManager(requireContext()).getSelectedDevice()
+                            )
+                        hideLoading()
+
+                        if (listMember.isNotEmpty()) {
+                            for (member in listMember) {
+                                member.createdDate =
+                                    formatDateTime(member.createdDate, "HH:mm - dd/MM/yyyy")
+                                member.dateOfBirth =
+                                    formatDateTime(member.dateOfBirth, "dd/MM/yyyy")
+                            }
+                            viewModel.setListMember(listMember)
+                        }
+
                         hideLoading()
                         res.dateOfBirth = formatDateTime(res.dateOfBirth, "dd/MM/yyyy")
                         res.createdDate = formatDateTime(res.createdDate, "HH:mm - dd/MM/yyyy")

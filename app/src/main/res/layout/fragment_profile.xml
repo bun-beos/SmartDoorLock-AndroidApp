@@ -213,7 +213,7 @@
 
             <Button
                 android:id="@+id/logOut"
-                android:layout_width="150dp"
+                android:layout_width="wrap_content"
                 android:layout_height="50dp"
                 android:backgroundTint="@color/white"
                 android:text="@string/log_out"

@@ -64,25 +64,6 @@ class HomeFragment : Fragment() {
             viewModel.setMode(HistoryMode.LIST.toString())
         }
 
-//        binding.listDevice.adapter =
-//            MyDeviceListAdapter(
-//                requireActivity()
-//            ) { device ->
-//                val newList = mutableListOf<Device>()
-//                for (item in viewModel.devices.value!!) {
-//                    item.selected = (item.deviceId == device.deviceId)
-//                    if (item.selected) {
-//                        newList.add(0, item)
-//                    } else {
-//                        newList.add(item)
-//                    }
-//                }
-//                viewModel.setMyListDevice(newList)
-////                binding.listDevice.scrollToPosition(0)
-//
-//                getListLabel(device.deviceId)
-//            }
-
         if (viewModel.devices.value.isNullOrEmpty()) {
             getMyListDevice(requireContext(), myAccountId, currentDeviceId, phoneToken)
         } else {
