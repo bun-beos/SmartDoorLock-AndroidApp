@@ -13,4 +13,4 @@
 - Binding dữ liệu hai chiều với ViewModel và LiveData
 - Gọi API sử dụng retrofit
 - Nhận thông báo qua dịch vụ Firebase Cloud Message
-## Link video demo app: [Video demo](https://youtu.be/0qckzXlplkI?si=vaCXJSMmDEo9fvsa)
+## Link video demo app: [Video demo](https://youtu.be/n93Xc-_K0-M)
